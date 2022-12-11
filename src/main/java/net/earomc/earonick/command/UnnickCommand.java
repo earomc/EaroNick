@@ -3,62 +3,62 @@ package net.earomc.earonick.command;
 import net.earomc.earonick.EaroNick;
 import net.earomc.earonick.NickManager;
 import net.earomc.earonick.config.ConfigWrapper;
-import net.md_5.bungee.api.CommandSender;
-import net.md_5.bungee.api.chat.TextComponent;
-import net.md_5.bungee.api.connection.ProxiedPlayer;
-import net.md_5.bungee.api.plugin.Command;
+import org.bukkit.command.Command;
+import org.bukkit.command.CommandExecutor;
+import org.bukkit.command.CommandSender;
+import org.bukkit.configuration.file.FileConfiguration;
+import org.bukkit.entity.Player;
 
 /**
  * @author tiiita_
- * Created on Dezember 11, 2022 | 02:14:17
+ * Created on Dezember 11, 2022 | 03:24:25
  * (●'◡'●)
  */
-public class UnnickCommand extends Command {
-
+public class UnnickCommand implements CommandExecutor {
     private final EaroNick plugin;
 
-    public UnnickCommand(String name, EaroNick plugin) {
-        super(name);
+    public UnnickCommand(EaroNick plugin) {
         this.plugin = plugin;
     }
 
     @Override
-    public void execute(CommandSender sender, String[] args) {
-        if (!(sender instanceof ProxiedPlayer)) {
-            return;
+    public boolean onCommand(CommandSender sender, Command command, String label, String[] args) {
+        if (!(sender instanceof Player)) {
+            return false;
         }
 
-        ProxiedPlayer player = (ProxiedPlayer) sender;
+        Player player = (Player) sender;
 
-        ConfigWrapper config = plugin.getConfig();
+        FileConfiguration config = plugin.getConfig();
         ConfigWrapper messageConfig = plugin.getMessageConfig();
 
         if (!player.hasPermission(config.getString("unnick-command.permission"))) {
-            player.sendMessage(new TextComponent(messageConfig.color(messageConfig.getString("prefix") + " " + messageConfig.getString("no-permission"))));
-            return;
+            player.sendMessage(messageConfig.color(messageConfig.getString("prefix") + " " + messageConfig.getString("no-permission")));
+            return false;
         }
 
         if (args.length != 0) {
             sendCommandUsage(player);
-            return;
+            return false;
         }
 
         NickManager nickManager = plugin.getNickManager();
 
         String coloredPrefixWithSpace = messageConfig.color(messageConfig.getString("prefix") + " ");
         if (!nickManager.isNicked(player)) {
-            player.sendMessage(new TextComponent(coloredPrefixWithSpace + messageConfig.color(messageConfig.getString("not-nicked"))));
-            return;
+            player.sendMessage(coloredPrefixWithSpace + messageConfig.color(messageConfig.getString("not-nicked")));
+            return false;
         }
 
         nickManager.unnickPlayer(player);
-        player.sendMessage(new TextComponent(coloredPrefixWithSpace + messageConfig.color(messageConfig.getString("have-been-unnicked"))));
+        player.sendMessage(coloredPrefixWithSpace + messageConfig.color(messageConfig.getString("have-been-unnicked")));
+        return true;
     }
 
-    private void sendCommandUsage(ProxiedPlayer player) {
+    private void sendCommandUsage(Player player) {
 
-        for (String currentMessage : plugin.getConfig().getStringList("unnick-command.usage")) {
-            player.sendMessage(new TextComponent(plugin.getConfig().color(currentMessage)));
+        for (String currentMessage : plugin.getConfig().getStringList("nick-command.usage")) {
+            player.sendMessage(currentMessage.replaceAll("&", "§"));
         }
     }
 }

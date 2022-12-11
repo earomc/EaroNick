@@ -2,9 +2,8 @@ package net.earomc.earonick.config;
 
 import net.earomc.earonick.EaroNick;
 import net.md_5.bungee.api.ChatColor;
-import net.md_5.bungee.config.Configuration;
-import net.md_5.bungee.config.ConfigurationProvider;
-import net.md_5.bungee.config.YamlConfiguration;
+import org.bukkit.configuration.InvalidConfigurationException;
+import org.bukkit.configuration.file.YamlConfiguration;
 
 import java.io.File;
 import java.io.IOException;
@@ -20,7 +19,7 @@ import java.util.logging.Level;
 public class ConfigWrapper {
     private final EaroNick plugin;
 
-    private Configuration fileConfiguration;
+    private YamlConfiguration fileConfiguration;
     private final File file;
 
     public ConfigWrapper(String name, File path, EaroNick plugin) {
@@ -35,11 +34,7 @@ public class ConfigWrapper {
                 plugin.getLogger().log(Level.SEVERE, "There was an error creating the config!");
             }
         }
-        try {
-            fileConfiguration = ConfigurationProvider.getProvider(YamlConfiguration.class).load(this.file);
-        } catch (IOException e) {
-            plugin.getLogger().log(Level.SEVERE, "There was an error loading the config!");
-        }
+        fileConfiguration = YamlConfiguration.loadConfiguration(file);
     }
 
     public File getFile() {
@@ -48,21 +43,21 @@ public class ConfigWrapper {
 
     public void save() {
         try {
-            ConfigurationProvider.getProvider(YamlConfiguration.class).save(this.fileConfiguration, this.file);
+            fileConfiguration.save(file);
         } catch (IOException e) {
             e.printStackTrace();
-            plugin.getLogger().log(Level.SEVERE, "There was an error saving the config!");
         }
     }
 
     public void reload() {
         try {
-            ConfigurationProvider.getProvider(YamlConfiguration.class).load(this.file);
+            fileConfiguration.load(file);
         } catch (IOException e) {
             plugin.getLogger().log(Level.SEVERE, "There was an error reloading the config!");
+        } catch (InvalidConfigurationException e) {
+            throw new RuntimeException(e);
         }
     }
-
 
 
     public String color(String path) {

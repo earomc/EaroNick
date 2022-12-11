@@ -1,6 +1,7 @@
 package net.earomc.earonick;
 
-import net.md_5.bungee.api.connection.ProxiedPlayer;
+import org.bukkit.entity.Player;
+
 import java.util.HashSet;
 /**
  * @author tiiita_
@@ -15,16 +16,21 @@ public class NickManager {
         this.plugin = plugin;
     }
 
-    private final HashSet<ProxiedPlayer> nickedPlayers = new HashSet<>();
-    public void nickPlayer(ProxiedPlayer player, String newName) {
+    private final HashSet<Player> nickedPlayers = new HashSet<>();
+    public void nickPlayer(Player player, String newName) {
         nickedPlayers.add(player);
+
+        //nick player
     }
 
-    public void unnickPlayer(ProxiedPlayer player) {
+    public void unnickPlayer(Player player) {
         nickedPlayers.remove(player);
+
+        //unnick player
+
     }
 
-    public boolean isNicked(ProxiedPlayer player) {
+    public boolean isNicked(Player player) {
         return nickedPlayers.contains(player);
     }
 
