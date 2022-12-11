@@ -45,12 +45,14 @@ public class UnnickCommand extends Command {
 
         NickManager nickManager = plugin.getNickManager();
 
+        String coloredPrefixWithSpace = messageConfig.color(messageConfig.getString("prefix") + " ");
         if (!nickManager.isNicked(player)) {
-            messageConfig.color(messageConfig.getString(messageConfig.getString("prefix") + " " + "not-nicked"));
+            player.sendMessage(new TextComponent(coloredPrefixWithSpace + messageConfig.color(messageConfig.getString("not-nicked"))));
             return;
         }
 
         nickManager.unnickPlayer(player);
+        player.sendMessage(new TextComponent(coloredPrefixWithSpace + messageConfig.color(messageConfig.getString("have-been-unnicked"))));
     }
 
     private void sendCommandUsage(ProxiedPlayer player) {

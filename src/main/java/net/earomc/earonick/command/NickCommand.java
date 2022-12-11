@@ -43,14 +43,16 @@ public class NickCommand extends Command {
             return;
         }
 
+        String coloredPrefixWithSpace = messageConfig.color(messageConfig.getString("prefix") + " ");
         NickManager nickManager = plugin.getNickManager();
 
         if (nickManager.isNicked(player)) {
-            messageConfig.color(messageConfig.getString(messageConfig.getString("prefix") + " " + "already-nicked"));
+            player.sendMessage(new TextComponent(coloredPrefixWithSpace + messageConfig.color(messageConfig.getString("already-nicked"))));
             return;
         }
 
         nickManager.nickPlayer(player, args[0]);
+        player.sendMessage(new TextComponent(coloredPrefixWithSpace + messageConfig.color(messageConfig.getString("have-been-nicked", "%newNick%", args[0]))));
 
     }
 
