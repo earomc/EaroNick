@@ -88,7 +88,6 @@ public class NickManager {
         gameProfile.getProperties().put(skin.getSkinName(), new Property(skin.getSkinName(), skin.getSkinValue(), skin.getSkinSignatur()));
         refreshPlayer(player);
 
-
         uuidToOldNameMap.remove(player.getUniqueId());
 
     }
