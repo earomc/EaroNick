@@ -9,3 +9,4 @@ unnick-command:
     - '&cUsage:'
     - '&c- /unnick'
 nicked-name-prefix: '&7'
+nick-chat-format: '&8[&7Player&8] &7%nickname% &8» &f%message%'

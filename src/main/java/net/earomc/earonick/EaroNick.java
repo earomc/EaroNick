@@ -43,6 +43,8 @@ public final class EaroNick extends JavaPlugin {
     private void registerListener() {
         PluginManager pluginManager = Bukkit.getPluginManager();
 
+        pluginManager.registerEvents(new ChatListener(this), this);
+        pluginManager.registerEvents(new ConnectionListener(this), this);
     }
 
 

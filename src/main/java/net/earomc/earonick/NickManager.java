@@ -46,6 +46,7 @@ public class NickManager {
         player.setPlayerListName(realName);
         player.setDisplayName(realName);
 
+        uuidToOldNameMap.remove(player.getUniqueId());
 
     }
 
@@ -54,8 +55,8 @@ public class NickManager {
     }
 
 
-    /*
-    public String getNickName(ProxiedPlayer player) {
 
-    }*/
+    public String getNickName(Player player) {
+        return player.getDisplayName();
+    }
 }
