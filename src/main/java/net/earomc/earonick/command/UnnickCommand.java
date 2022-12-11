@@ -57,7 +57,7 @@ public class UnnickCommand implements CommandExecutor {
 
     private void sendCommandUsage(Player player) {
 
-        for (String currentMessage : plugin.getConfig().getStringList("nick-command.usage")) {
+        for (String currentMessage : plugin.getConfig().getStringList("unnick-command.usage")) {
             player.sendMessage(currentMessage.replaceAll("&", "§"));
         }
     }
