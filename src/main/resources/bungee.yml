@@ -1,0 +1,4 @@
+name: EaroNick
+version: '${project.version}'
+main: net.earomc.earonick.EaroNick
+description: EaroMC.net Nick system
