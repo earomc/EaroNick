@@ -1,7 +1,9 @@
 package net.earomc.earonick.nick;
 
 import com.mojang.authlib.GameProfile;
+import com.mojang.authlib.properties.Property;
 import net.earomc.earonick.EaroNick;
+import net.earomc.earonick.Skin;
 import net.minecraft.server.v1_8_R3.PacketPlayOutEntityDestroy;
 import net.minecraft.server.v1_8_R3.PacketPlayOutNamedEntitySpawn;
 import net.minecraft.server.v1_8_R3.PacketPlayOutPlayerInfo;
@@ -44,9 +46,34 @@ public class NickManager {
         player.setPlayerListName(finalNewName);
         player.setDisplayName(finalNewName);
 
-        player.getSK
-
         changeNameTag(player, finalNewName);
+
+        GameProfile gameProfile = ((CraftPlayer)player).getProfile();
+        gameProfile.getProperties().clear();
+
+        Skin skin = new Skin(getUUID(newName).toString());
+
+        if (skin.getSkinName() == null) {
+            //give random skin
+
+        }
+
+
+        gameProfile.getProperties().put(skin.getSkinName(), new Property(skin.getSkinName(), skin.getSkinValue(), skin.getSkinSignatur()));
+
+        Bukkit.getScheduler().runTaskLater(plugin, () -> {
+            for (Player onlinePlayer : Bukkit.getOnlinePlayers()) {
+                onlinePlayer.hidePlayer(player);
+            }
+        }, 20);
+
+        Bukkit.getScheduler().runTaskLater(plugin, () -> {
+            for (Player onlinePlayer : Bukkit.getOnlinePlayers()) {
+                onlinePlayer.showPlayer(player);
+            }
+        }, 40);
+
+
     }
 
     public void unnickPlayer(Player player) {
@@ -71,13 +98,13 @@ public class NickManager {
         return player.getDisplayName();
     }
 
-    public void changeNameTag(Player player, String newName){
-        for(Player pl : Bukkit.getOnlinePlayers()){
-            if(pl == player) continue;
+    public void changeNameTag(Player player, String newName) {
+        for(Player currentPlayer : Bukkit.getOnlinePlayers()){
+            if(currentPlayer == player) continue;
             //REMOVES THE PLAYER
-            ((CraftPlayer)pl).getHandle().playerConnection.sendPacket(new PacketPlayOutPlayerInfo(PacketPlayOutPlayerInfo.EnumPlayerInfoAction.REMOVE_PLAYER, ((CraftPlayer) player).getHandle()));
+            ((CraftPlayer) currentPlayer).getHandle().playerConnection.sendPacket(new PacketPlayOutPlayerInfo(PacketPlayOutPlayerInfo.EnumPlayerInfoAction.REMOVE_PLAYER, ((CraftPlayer) player).getHandle()));
             //CHANGES THE PLAYER'S GAME PROFILE
-            GameProfile gp = ((CraftPlayer) player).getProfile();
+            GameProfile gameProfile = ((CraftPlayer) player).getProfile();
             try {
                 Field nameField = GameProfile.class.getDeclaredField("name");
                 nameField.setAccessible(true);
@@ -86,14 +113,18 @@ public class NickManager {
                 modifiersField.setAccessible(true);
                 modifiersField.setInt(nameField, nameField.getModifiers() & ~Modifier.FINAL);
 
-                nameField.set(gp, newName);
+                nameField.set(gameProfile, newName);
             } catch (IllegalAccessException | NoSuchFieldException ex) {
                 throw new IllegalStateException(ex);
             }
             //ADDS THE PLAYER
-            ((CraftPlayer)pl).getHandle().playerConnection.sendPacket(new PacketPlayOutPlayerInfo(PacketPlayOutPlayerInfo.EnumPlayerInfoAction.ADD_PLAYER, ((CraftPlayer) player).getHandle()));
-            ((CraftPlayer)pl).getHandle().playerConnection.sendPacket(new PacketPlayOutEntityDestroy(player.getEntityId()));
-            ((CraftPlayer)pl).getHandle().playerConnection.sendPacket(new PacketPlayOutNamedEntitySpawn(((CraftPlayer) player).getHandle()));
+            ((CraftPlayer) currentPlayer).getHandle().playerConnection.sendPacket(new PacketPlayOutPlayerInfo(PacketPlayOutPlayerInfo.EnumPlayerInfoAction.ADD_PLAYER, ((CraftPlayer) player).getHandle()));
+            ((CraftPlayer) currentPlayer).getHandle().playerConnection.sendPacket(new PacketPlayOutEntityDestroy(player.getEntityId()));
+            ((CraftPlayer) currentPlayer).getHandle().playerConnection.sendPacket(new PacketPlayOutNamedEntitySpawn(((CraftPlayer) player).getHandle()));
         }
+    }
+
+    private UUID getUUID(String name) {
+        return Bukkit.getOfflinePlayer(name).getUniqueId();
     }
 }

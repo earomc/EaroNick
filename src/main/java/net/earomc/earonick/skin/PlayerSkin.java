@@ -4,13 +4,19 @@ import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 import com.mojang.authlib.GameProfile;
 import com.mojang.authlib.properties.Property;
+import net.earomc.earonick.EaroNick;
 import net.minecraft.server.v1_8_R3.EntityPlayer;
+import net.minecraft.server.v1_8_R3.PacketPlayOutPlayerInfo;
+import net.minecraft.server.v1_8_R3.PlayerConnection;
+import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.craftbukkit.libs.jline.internal.InputStreamReader;
 import org.bukkit.craftbukkit.v1_8_R3.entity.CraftPlayer;
 import org.bukkit.entity.Player;
 
 import java.io.IOException;
 import java.net.URL;
+import java.util.List;
+import java.util.Random;
 
 /**
  * @author tiiita_
@@ -18,15 +24,12 @@ import java.net.URL;
  * (●'◡'●)
  */
 public class PlayerSkin {
+    private final EaroNick plugin;
 
-    public String[] getFromPlayer(Player playerBukkit) {
-        EntityPlayer playerNMS = ((CraftPlayer) playerBukkit).getHandle();
-        GameProfile profile = playerNMS.getProfile();
-        Property property = profile.getProperties().get("textures").iterator().next();
-        String texture = property.getValue();
-        String signature = property.getSignature();
-        return new String[] {texture, signature};
+    public PlayerSkin(EaroNick plugin) {
+        this.plugin = plugin;
     }
+
 
     public String[] getFromName(String name) {
         try {
@@ -48,4 +51,29 @@ public class PlayerSkin {
         }
     }
 
+
+    public void changeToRandomSkin(Player player) {
+        GameProfile gameProfile = ((CraftPlayer)player).getHandle().getProfile();
+        PlayerConnection connection = ((CraftPlayer)player).getHandle().playerConnection;
+
+        connection.sendPacket(new PacketPlayOutPlayerInfo(
+                PacketPlayOutPlayerInfo.EnumPlayerInfoAction.REMOVE_PLAYER, ((CraftPlayer)player).getHandle()));
+
+        gameProfile.getProperties().removeAll("textures");
+        gameProfile.getProperties().put("textures", getRandomSkin());
+
+        connection.sendPacket(new PacketPlayOutPlayerInfo(
+                PacketPlayOutPlayerInfo.EnumPlayerInfoAction.REMOVE_PLAYER, ((CraftPlayer)player).getHandle()));
+
+    }
+
+    public Property getRandomSkin() {
+
+        FileConfiguration config = plugin.getConfig();
+        Random random = new Random();
+        List<String> skins = config.getStringList("skins");
+        int randomNumber = random.nextInt(skins.size());
+
+        return new Property("textures", skins.get(randomNumber));
+    }
 }
