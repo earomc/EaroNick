@@ -1,5 +1,6 @@
 package net.earomc.earonick;
 
+import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.entity.Player;
 
 import java.util.HashMap;
@@ -21,19 +22,23 @@ public class NickManager {
 
     private final HashSet<Player> nickedPlayers = new HashSet<>();
     private HashMap<UUID, String> uuidToOldNameMap = new HashMap<>();
+
     public void nickPlayer(Player player, String newName) {
         nickedPlayers.add(player);
         uuidToOldNameMap.put(player.getUniqueId(), player.getName());
+        FileConfiguration config = plugin.getConfig();
+        String playerPrefix = config.getString("nicked-name-prefix").replaceAll("&", "§");
 
         //nick player
-        player.setCustomName(newName);
-        player.setPlayerListName(newName);
-        player.setDisplayName(newName);
+        player.setCustomName(playerPrefix + newName);
+        player.setPlayerListName(playerPrefix + newName);
+        player.setDisplayName(playerPrefix + newName);
 
     }
 
     public void unnickPlayer(Player player) {
         nickedPlayers.remove(player);
+
 
         //unnick player
         String realName = uuidToOldNameMap.get(player.getUniqueId());

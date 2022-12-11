@@ -8,3 +8,4 @@ unnick-command:
   usage:
     - '&cUsage:'
     - '&c- /unnick'
+nicked-name-prefix: '&7'
