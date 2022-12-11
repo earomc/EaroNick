@@ -1,10 +1,8 @@
 package net.earomc.earonick;
 
-import com.sun.jdi.connect.spi.Connection;
+import net.minecraft.server.v1_8_R3.PacketPlayOutPlayerInfo;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.entity.Player;
-
-import java.sql.PreparedStatement;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.UUID;
@@ -29,14 +27,13 @@ public class NickManager {
         nickedPlayers.add(player);
         uuidToOldNameMap.put(player.getUniqueId(), player.getName());
         FileConfiguration config = plugin.getConfig();
-        String playerPrefix = config.getString("nicked-name-prefix").replaceAll("&", "§");
+        String playerPrefix = config.getString("nicked-name-prefix-tab").replaceAll("&", "§");
 
         //nick player
         player.setCustomName(playerPrefix + newName);
         player.setPlayerListName(playerPrefix + newName);
         player.setDisplayName(playerPrefix + newName);
-
-
+        changeNameTag(player, config.getString("nicked-name-prefix-tag").replaceAll("&", "§" + newName));
 
     }
 
@@ -49,7 +46,7 @@ public class NickManager {
         player.setDisplayName(realName);
         player.setPlayerListName(realName);
         player.setDisplayName(realName);
-
+        changeNameTag(player, realName);
         uuidToOldNameMap.remove(player.getUniqueId());
 
     }
@@ -62,5 +59,11 @@ public class NickManager {
 
     public String getNickName(Player player) {
         return player.getDisplayName();
+    }
+
+    private void changeNameTag(Player player, String newName) {
+        PacketPlayOutPlayerInfo info = new PacketPlayOutPlayerInfo();
+
+
     }
 }

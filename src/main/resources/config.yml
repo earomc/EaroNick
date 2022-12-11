@@ -8,5 +8,6 @@ unnick-command:
   usage:
     - '&cUsage:'
     - '&c- /unnick'
-nicked-name-prefix: '&7'
+nicked-name-prefix-tab: '&7'
+nicked-name-prefix-tag: '&7'
 nick-chat-format: '&8[&7Player&8] &7%nickname% &8» &f%message%'

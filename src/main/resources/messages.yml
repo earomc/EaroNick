@@ -1,6 +1,9 @@
 prefix: '§8[§fEaroNick§8] '
 no-permission: '&cNo permissions.'
+
+nickname-too-long: '&cThe nickname is too long.'
 already-nicked: '&cYou are already nicked. Please use /unnick to disable your nickname.'
 not-nicked: '&cYou are not nicked.'
+
 have-been-nicked: '&7You are now nicked as &6%newNick%§7.'
 have-been-unnicked: '&7You have been unnicked.'

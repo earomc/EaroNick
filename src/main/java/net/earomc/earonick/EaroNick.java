@@ -22,6 +22,7 @@ public final class EaroNick extends JavaPlugin {
 
         messageConfig = new ConfigWrapper("messages.yml", getDataFolder(), this);
 
+
         nickManager = new NickManager(this);
 
         registerCommands();
