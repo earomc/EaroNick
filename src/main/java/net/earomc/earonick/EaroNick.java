@@ -19,7 +19,7 @@ public final class EaroNick extends JavaPlugin {
         // Plugin startup logic
 
         saveDefaultConfig();
-        saveConfig();
+        saveResource("messages.yml", false);
 
         messageConfig = new ConfigWrapper("messages.yml", getDataFolder(), this);
 

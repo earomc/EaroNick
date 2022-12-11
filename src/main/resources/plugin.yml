@@ -1,4 +1,4 @@
-name: PPPStaff
+name: EaroNick
 version: '${project.version}'
 main: net.earomc.earonick.EaroNick
 authors: [ tiiita ]

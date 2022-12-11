@@ -21,6 +21,7 @@ public class NickManager {
         nickedPlayers.add(player);
 
         //nick player
+        player
     }
 
     public void unnickPlayer(Player player) {
