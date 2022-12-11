@@ -33,7 +33,7 @@ public class UnnickCommand implements CommandExecutor {
         ConfigWrapper messageConfig = plugin.getMessageConfig();
 
         if (!player.hasPermission(config.getString("unnick-command.permission"))) {
-            player.sendMessage(messageConfig.color(messageConfig.getString("prefix") + " " + messageConfig.getString("no-permission")));
+            player.sendMessage(messageConfig.color(messageConfig.getString("prefix") + messageConfig.getString("no-permission")));
             return false;
         }
 
@@ -44,14 +44,14 @@ public class UnnickCommand implements CommandExecutor {
 
         NickManager nickManager = plugin.getNickManager();
 
-        String coloredPrefixWithSpace = messageConfig.color(messageConfig.getString("prefix") + " ");
+        String prefix = messageConfig.color(messageConfig.getString("prefix"));
         if (!nickManager.isNicked(player)) {
-            player.sendMessage(coloredPrefixWithSpace + messageConfig.color(messageConfig.getString("not-nicked")));
+            player.sendMessage(prefix + messageConfig.color(messageConfig.getString("not-nicked")));
             return false;
         }
 
         nickManager.unnickPlayer(player);
-        player.sendMessage(coloredPrefixWithSpace + messageConfig.color(messageConfig.getString("have-been-unnicked")));
+        player.sendMessage(prefix + messageConfig.color(messageConfig.getString("have-been-unnicked")));
         return true;
     }
 

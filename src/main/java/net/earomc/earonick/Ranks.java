@@ -6,5 +6,5 @@ package net.earomc.earonick;
  * (●'◡'●)
  */
 public enum Ranks {
-    
+
 }
