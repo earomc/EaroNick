@@ -1,6 +1,6 @@
-package net.earomc.earonick;
+package net.earomc.earonick.nick;
 
-import org.bukkit.configuration.file.FileConfiguration;
+import net.earomc.earonick.EaroNick;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;

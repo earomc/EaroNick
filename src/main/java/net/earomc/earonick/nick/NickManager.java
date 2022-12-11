@@ -1,6 +1,7 @@
-package net.earomc.earonick;
+package net.earomc.earonick.nick;
 
 import com.mojang.authlib.GameProfile;
+import net.earomc.earonick.EaroNick;
 import net.minecraft.server.v1_8_R3.PacketPlayOutEntityDestroy;
 import net.minecraft.server.v1_8_R3.PacketPlayOutNamedEntitySpawn;
 import net.minecraft.server.v1_8_R3.PacketPlayOutPlayerInfo;
@@ -43,6 +44,7 @@ public class NickManager {
         player.setPlayerListName(finalNewName);
         player.setDisplayName(finalNewName);
 
+        player.getSK
 
         changeNameTag(player, finalNewName);
     }
