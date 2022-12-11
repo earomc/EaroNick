@@ -29,7 +29,6 @@ public class ConnectionListener implements Listener {
     public void onQuit(PlayerQuitEvent event) {
         Player player = event.getPlayer();
 
-        FileConfiguration config = plugin.getConfig();
         NickManager nickManager = plugin.getNickManager();
 
         if (nickManager.isNicked(player))

@@ -1,8 +1,10 @@
 package net.earomc.earonick;
 
+import com.sun.jdi.connect.spi.Connection;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.entity.Player;
 
+import java.sql.PreparedStatement;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.UUID;
@@ -33,6 +35,8 @@ public class NickManager {
         player.setCustomName(playerPrefix + newName);
         player.setPlayerListName(playerPrefix + newName);
         player.setDisplayName(playerPrefix + newName);
+
+
 
     }
 

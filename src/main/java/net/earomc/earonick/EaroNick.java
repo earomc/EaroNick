@@ -1,5 +1,7 @@
 package net.earomc.earonick;
 
+import com.comphenix.protocol.ProtocolLibrary;
+import com.comphenix.protocol.ProtocolManager;
 import net.earomc.earonick.command.NickCommand;
 import net.earomc.earonick.command.UnnickCommand;
 import net.earomc.earonick.config.ConfigWrapper;
@@ -11,8 +13,8 @@ import org.bukkit.plugin.java.JavaPlugin;
 public final class EaroNick extends JavaPlugin {
 
     private NickManager nickManager;
-    private ConfigWrapper config;
     private ConfigWrapper messageConfig;
+    private ProtocolManager protocolManager;
 
     @Override
     public void onEnable() {
@@ -21,6 +23,7 @@ public final class EaroNick extends JavaPlugin {
         saveDefaultConfig();
         saveResource("messages.yml", false);
 
+        protocolManager = ProtocolLibrary.getProtocolManager();
         messageConfig = new ConfigWrapper("messages.yml", getDataFolder(), this);
 
         nickManager = new NickManager(this);
@@ -54,5 +57,10 @@ public final class EaroNick extends JavaPlugin {
 
     public ConfigWrapper getMessageConfig() {
         return messageConfig;
+    }
+
+
+    public ProtocolManager getProtocolManager() {
+        return protocolManager;
     }
 }
