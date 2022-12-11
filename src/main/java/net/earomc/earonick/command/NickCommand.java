@@ -34,7 +34,7 @@ public class NickCommand extends Command {
         ConfigWrapper messageConfig = plugin.getMessageConfig();
 
         if (!player.hasPermission(config.getString("nick-command.permission"))) {
-            player.sendMessage(new TextComponent(messageConfig.color(messageConfig.getString("no-permission"))));
+            player.sendMessage(new TextComponent(messageConfig.color(messageConfig.getString("prefix") + " " + messageConfig.getString("no-permission"))));
             return;
         }
 
@@ -46,7 +46,7 @@ public class NickCommand extends Command {
         NickManager nickManager = plugin.getNickManager();
 
         if (nickManager.isNicked(player)) {
-            messageConfig.color(messageConfig.getString("already-nicked"));
+            messageConfig.color(messageConfig.getString(messageConfig.getString("prefix") + " " + "already-nicked"));
             return;
         }
 
@@ -56,7 +56,7 @@ public class NickCommand extends Command {
 
     private void sendCommandUsage(ProxiedPlayer player) {
 
-        for (String currentMessage : plugin.getConfig().getStringList("command-usage")) {
+        for (String currentMessage : plugin.getConfig().getStringList("nick-command.usage")) {
             player.sendMessage(new TextComponent(plugin.getConfig().color(currentMessage)));
         }
     }

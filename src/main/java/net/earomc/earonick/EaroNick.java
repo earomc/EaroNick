@@ -20,7 +20,7 @@ public final class EaroNick extends Plugin {
         config = new ConfigWrapper("config.yml", getDataFolder(), this);
         messageConfig = new ConfigWrapper("messages.yml", getDataFolder(), this);
 
-        nickManager = new NickManager();
+        nickManager = new NickManager(this);
 
         registerCommands();
         registerListener();

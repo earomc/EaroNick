@@ -2,4 +2,9 @@ nick-command:
   permission: 'global.command.nick'
   usage:
     - '&cUsage:'
-    - '&c/nick [nickname]'
+    - '- &c/nick [nickname]'
+unnick-command:
+  permssion: global.command.nick #/nick and /unnick have the same permission, change if you want.
+  usage:
+    - '&cUsage:'
+    - '- &c/unnick'
