@@ -1,8 +1,11 @@
 package net.earomc.earonick.command;
 
+import net.earomc.earonick.EaroNick;
+import net.earomc.earonick.config.ConfigWrapper;
 import net.md_5.bungee.api.CommandSender;
 import net.md_5.bungee.api.connection.ProxiedPlayer;
 import net.md_5.bungee.api.plugin.Command;
+import net.md_5.bungee.api.plugin.Plugin;
 
 /**
  * @author tiiita_
@@ -10,8 +13,12 @@ import net.md_5.bungee.api.plugin.Command;
  * (●'◡'●)
  */
 public class NickCommand extends Command {
-    public NickCommand(String name) {
+
+    private final EaroNick plugin;
+
+    public NickCommand(String name, EaroNick plugin) {
         super(name);
+        this.plugin = plugin;
     }
 
     @Override
@@ -22,6 +29,13 @@ public class NickCommand extends Command {
 
         ProxiedPlayer player = (ProxiedPlayer) sender;
 
+        ConfigWrapper config = plugin.getConfig();
+        ConfigWrapper messageConfig = plugin.getMessageConfig();
+
+        if (!player.hasPermission(config.getString("nick-command.permission"))) {
+            player.sendMessage();
+            return;
+        }
 
     }
 }

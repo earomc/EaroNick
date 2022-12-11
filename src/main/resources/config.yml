@@ -1,0 +1,5 @@
+nick-command:
+  permission: 'global.command.nick'
+  usage:
+    - '&cUsage:'
+    - '&c/nick [nickname]'

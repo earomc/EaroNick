@@ -8,6 +8,7 @@ public final class EaroNick extends Plugin {
 
     private NickManager nickManager;
     private ConfigWrapper config;
+    private ConfigWrapper messageConfig;
 
     @Override
     public void onEnable() {
@@ -15,6 +16,7 @@ public final class EaroNick extends Plugin {
 
         //load config.yml
         config = new ConfigWrapper("config.yml", getDataFolder(), this);
+        messageConfig = new ConfigWrapper("messages.yml", getDataFolder(), this);
 
         nickManager = new NickManager();
     }
@@ -29,5 +31,9 @@ public final class EaroNick extends Plugin {
     }
     public ConfigWrapper getConfig() {
         return config;
+    }
+
+    public ConfigWrapper getMessageConfig() {
+        return messageConfig;
     }
 }
