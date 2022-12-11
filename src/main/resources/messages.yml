@@ -1,2 +1,2 @@
 no-permission: '&cNo permissions.'
-already-nicked: '&cYou are already nicked.'
+already-nicked: '&cYou are already nicked. Please use /unnick to disable your nickname.'

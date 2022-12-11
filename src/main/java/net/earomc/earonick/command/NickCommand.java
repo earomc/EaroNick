@@ -2,14 +2,11 @@ package net.earomc.earonick.command;
 
 import net.earomc.earonick.EaroNick;
 import net.earomc.earonick.config.ConfigWrapper;
-import net.earomc.earonick.manager.NickManager;
+import net.earomc.earonick.NickManager;
 import net.md_5.bungee.api.CommandSender;
 import net.md_5.bungee.api.chat.TextComponent;
 import net.md_5.bungee.api.connection.ProxiedPlayer;
 import net.md_5.bungee.api.plugin.Command;
-import net.md_5.bungee.api.plugin.Plugin;
-
-import java.util.List;
 
 /**
  * @author tiiita_

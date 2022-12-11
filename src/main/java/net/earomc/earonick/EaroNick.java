@@ -1,8 +1,10 @@
 package net.earomc.earonick;
 
+import net.earomc.earonick.command.NickCommand;
+import net.earomc.earonick.command.UnnickCommand;
 import net.earomc.earonick.config.ConfigWrapper;
-import net.earomc.earonick.manager.NickManager;
 import net.md_5.bungee.api.plugin.Plugin;
+import net.md_5.bungee.api.plugin.PluginManager;
 
 public final class EaroNick extends Plugin {
 
@@ -19,6 +21,9 @@ public final class EaroNick extends Plugin {
         messageConfig = new ConfigWrapper("messages.yml", getDataFolder(), this);
 
         nickManager = new NickManager();
+
+        registerCommands();
+        registerListener();
     }
 
     @Override
@@ -26,6 +31,18 @@ public final class EaroNick extends Plugin {
         // Plugin shutdown logic
     }
 
+    private void registerCommands() {
+        PluginManager pluginManager = getProxy().getPluginManager();
+
+        pluginManager.registerCommand(this, new NickCommand("nick", this));
+        pluginManager.registerCommand(this, new UnnickCommand("unnick", this));
+    }
+
+    private void registerListener() {
+        PluginManager pluginManager = getProxy().getPluginManager();
+
+        pluginManager.registerListener(this, new ConnectionListener());
+    }
     public NickManager getNickManager() {
         return nickManager;
     }
