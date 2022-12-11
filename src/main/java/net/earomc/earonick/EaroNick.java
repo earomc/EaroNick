@@ -8,7 +8,7 @@ import net.earomc.earonick.config.ConfigWrapper;
 import net.earomc.earonick.nick.ChatListener;
 import net.earomc.earonick.nick.ConnectionListener;
 import net.earomc.earonick.nick.NickManager;
-import net.earomc.earonick.skin.PlayerSkin;
+import net.earomc.earonick.skin.RandomSkin;
 import org.bukkit.Bukkit;
 import org.bukkit.plugin.PluginManager;
 import org.bukkit.plugin.java.JavaPlugin;
@@ -19,7 +19,7 @@ public final class EaroNick extends JavaPlugin {
     private NickManager nickManager;
     private ProtocolManager protocolManager;
     private ConfigWrapper messageConfig;
-    private PlayerSkin playerSkin;
+    private RandomSkin randomSkin;
 
     @Override
     public void onEnable() {
@@ -30,7 +30,7 @@ public final class EaroNick extends JavaPlugin {
 
         protocolManager = ProtocolLibrary.getProtocolManager();
         messageConfig = new ConfigWrapper("messages.yml", getDataFolder(), this);
-        playerSkin = new PlayerSkin(this);
+        randomSkin = new RandomSkin(this);
 
         nickManager = new NickManager(this);
 
@@ -68,7 +68,7 @@ public final class EaroNick extends JavaPlugin {
         return protocolManager;
     }
 
-    public PlayerSkin getPlayerSkin() {
-        return playerSkin;
+    public RandomSkin getRandomSkin() {
+        return randomSkin;
     }
 }

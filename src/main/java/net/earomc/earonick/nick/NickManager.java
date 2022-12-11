@@ -3,7 +3,7 @@ package net.earomc.earonick.nick;
 import com.mojang.authlib.GameProfile;
 import com.mojang.authlib.properties.Property;
 import net.earomc.earonick.EaroNick;
-import net.earomc.earonick.Skin;
+import net.earomc.earonick.skin.Skin;
 import net.minecraft.server.v1_8_R3.PacketPlayOutEntityDestroy;
 import net.minecraft.server.v1_8_R3.PacketPlayOutNamedEntitySpawn;
 import net.minecraft.server.v1_8_R3.PacketPlayOutPlayerInfo;
@@ -40,24 +40,30 @@ public class NickManager {
         FileConfiguration config = plugin.getConfig();
         String playerPrefix = config.getString("nicked-name-prefix-tab").replaceAll("&", "§");
 
-        //nick player
+
         String finalNewName = playerPrefix + newName;
+
+        //change tablist and costum name
         player.setCustomName(finalNewName);
         player.setPlayerListName(finalNewName);
         player.setDisplayName(finalNewName);
 
+
+        //change nametag
         changeNameTag(player, finalNewName);
 
+        //change specific skin
         GameProfile gameProfile = ((CraftPlayer)player).getProfile();
         gameProfile.getProperties().clear();
 
         Skin skin = new Skin(getUUID(newName).toString());
 
-        if (skin.getSkinName() == null) {
+        //change to random skin if player doesn't exist
+        if (Bukkit.getOfflinePlayer(newName) == null) {
             //give random skin
-
+            plugin.getRandomSkin().changeTo(player);
+            return;
         }
-
 
         gameProfile.getProperties().put(skin.getSkinName(), new Property(skin.getSkinName(), skin.getSkinValue(), skin.getSkinSignatur()));
 
@@ -85,6 +91,29 @@ public class NickManager {
         player.setDisplayName(realName);
         player.setPlayerListName(realName);
         player.setDisplayName(realName);
+
+
+        GameProfile gameProfile = ((CraftPlayer)player).getProfile();
+        gameProfile.getProperties().clear();
+
+        Skin skin = new Skin(Bukkit.getPlayer(realName).getUniqueId().toString());
+        
+
+        gameProfile.getProperties().put(skin.getSkinName(), new Property(skin.getSkinName(), skin.getSkinValue(), skin.getSkinSignatur()));
+
+        Bukkit.getScheduler().runTaskLater(plugin, () -> {
+            for (Player onlinePlayer : Bukkit.getOnlinePlayers()) {
+                onlinePlayer.hidePlayer(player);
+            }
+        }, 20);
+
+        Bukkit.getScheduler().runTaskLater(plugin, () -> {
+            for (Player onlinePlayer : Bukkit.getOnlinePlayers()) {
+                onlinePlayer.showPlayer(player);
+            }
+        }, 40);
+
+
         uuidToOldNameMap.remove(player.getUniqueId());
 
     }
