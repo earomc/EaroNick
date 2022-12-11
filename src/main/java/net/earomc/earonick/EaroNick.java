@@ -6,6 +6,11 @@ import net.earomc.earonick.config.ConfigWrapper;
 import net.md_5.bungee.api.plugin.Plugin;
 import net.md_5.bungee.api.plugin.PluginManager;
 
+import java.io.File;
+import java.io.IOException;
+import java.io.InputStream;
+import java.nio.file.Files;
+
 public final class EaroNick extends Plugin {
 
     private NickManager nickManager;
@@ -16,7 +21,14 @@ public final class EaroNick extends Plugin {
     public void onEnable() {
         // Plugin startup logic
 
-        //load config.yml
+        try {
+            loadConfig("config.yml");
+            loadConfig("messages.yml");
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+
         config = new ConfigWrapper("config.yml", getDataFolder(), this);
         messageConfig = new ConfigWrapper("messages.yml", getDataFolder(), this);
 
@@ -42,6 +54,21 @@ public final class EaroNick extends Plugin {
         PluginManager pluginManager = getProxy().getPluginManager();
 
         pluginManager.registerListener(this, new ConnectionListener());
+    }
+
+    private void loadConfig(String name) throws IOException {
+        if (!getDataFolder().exists())
+            getDataFolder().mkdir();
+
+        File file = new File(this.getDataFolder(), name);
+
+        if (!file.exists()) {
+            try (InputStream in = getResourceAsStream(name)) {
+                Files.copy(in, file.toPath());
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
     }
     public NickManager getNickManager() {
         return nickManager;
