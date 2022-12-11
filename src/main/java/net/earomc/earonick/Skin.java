@@ -1,4 +1,4 @@
-package net.earomc.earonick.skin;
+package net.earomc.earonick;
 
 import org.bukkit.Bukkit;
 import org.json.simple.JSONArray;

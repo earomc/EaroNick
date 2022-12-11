@@ -51,7 +51,7 @@ public class NickCommand implements CommandExecutor {
             return false;
         }
 
-        if (args[0].length() > 16) {
+        if (args[0].length() >= 16) {
             player.sendMessage(prefix + messageConfig.color(messageConfig.getString("nickname-too-long")));
             return false;
         }
