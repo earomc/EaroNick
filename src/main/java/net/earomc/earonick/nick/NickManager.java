@@ -3,7 +3,6 @@ package net.earomc.earonick.nick;
 import com.mojang.authlib.GameProfile;
 import com.mojang.authlib.properties.Property;
 import net.earomc.earonick.EaroNick;
-import net.earomc.earonick.Skin;
 import net.minecraft.server.v1_8_R3.PacketPlayOutEntityDestroy;
 import net.minecraft.server.v1_8_R3.PacketPlayOutNamedEntitySpawn;
 import net.minecraft.server.v1_8_R3.PacketPlayOutPlayerInfo;
@@ -42,31 +41,14 @@ public class NickManager {
         String playerPrefix = config.getString("nicked-name-prefix-tab").replaceAll("&", "§");
 
 
+        //works if offline player exists
         String finalNewName = playerPrefix + newName;
+        SkinChanger skinChanger = new SkinChanger(player.getUniqueId());
+        OfflinePlayer targetPlayer = Bukkit.getOfflinePlayer(UUID.fromString(newName));
 
-        //change tablist and custom name
-        player.setCustomName(finalNewName);
-        player.setPlayerListName(finalNewName);
-        player.setDisplayName(finalNewName);
-
-
-        //change nametag
-        changeNameTag(player, finalNewName);
-
-        //change specific skin
-        GameProfile gameProfile = ((CraftPlayer)player).getProfile();
-        gameProfile.getProperties().clear();
-
-        Skin skin = new Skin(getUUID(newName).toString());
-
-        if (getOfflinePlayer(newName) == null) {
-            gameProfile.getProperties().put(getDefaultSkin().getName(), getDefaultSkin());
-            refreshPlayer(player);
-            return;
-        }
-
-        gameProfile.getProperties().put(skin.getSkinName(), new Property(skin.getSkinName(), skin.getSkinValue(), skin.getSkinSignatur()));
-        refreshPlayer(player);
+        //I don't have time... please fill in the change() method
+        skinChanger.change();
+        skinChanger.update();
     }
 
     public void unnickPlayer(Player player) {
@@ -81,13 +63,12 @@ public class NickManager {
 
         changeNameTag(player, realName);
 
-        GameProfile gameProfile = ((CraftPlayer)player).getProfile();
-        gameProfile.getProperties().clear();
+        SkinChanger skinChanger = new SkinChanger(player.getUniqueId());
 
-        Skin skin = new Skin(Bukkit.getPlayer(realName).getUniqueId().toString());
+        //I don't have time... please fill in the change() method
+        skinChanger.change();
+        skinChanger.update();
 
-        gameProfile.getProperties().put(skin.getSkinName(), new Property(skin.getSkinName(), skin.getSkinValue(), skin.getSkinSignatur()));
-        refreshPlayer(player);
 
         uuidToOldNameMap.remove(player.getUniqueId());
 
