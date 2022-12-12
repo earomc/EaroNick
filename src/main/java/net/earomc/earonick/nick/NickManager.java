@@ -8,6 +8,7 @@ import net.minecraft.server.v1_8_R3.PacketPlayOutEntityDestroy;
 import net.minecraft.server.v1_8_R3.PacketPlayOutNamedEntitySpawn;
 import net.minecraft.server.v1_8_R3.PacketPlayOutPlayerInfo;
 import org.bukkit.Bukkit;
+import org.bukkit.OfflinePlayer;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.craftbukkit.v1_8_R3.entity.CraftPlayer;
 import org.bukkit.entity.Player;
@@ -58,7 +59,7 @@ public class NickManager {
 
         Skin skin = new Skin(getUUID(newName).toString());
 
-        if (Bukkit.getOfflinePlayer(newName) == null) {
+        if (getOfflinePlayer(newName) == null) {
             gameProfile.getProperties().put(getDefaultSkin().getName(), getDefaultSkin());
             refreshPlayer(player);
             return;
@@ -146,5 +147,12 @@ public class NickManager {
                 onlinePlayer.showPlayer(player);
             }
         }, 20);
+    }
+
+    public OfflinePlayer getOfflinePlayer(String name) {
+        for(OfflinePlayer player : Bukkit.getOfflinePlayers()) {
+            if(player.getName().equals(name)) return player;
+        }
+        return null;
     }
 }
