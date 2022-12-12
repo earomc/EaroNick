@@ -51,7 +51,8 @@ public class UnnickCommand implements CommandExecutor {
         }
 
         nickManager.unnickPlayer(player);
-        player.sendMessage(prefix + messageConfig.color(messageConfig.getString("have-been-unnicked")));
+        player.sendMessage(prefix + messageConfig.color(messageConfig.getString("have-been-unnicked")
+                .replaceAll("%newLine%", "\n")));
         return true;
     }
 
