@@ -5,5 +5,5 @@ nickname-too-long: '&cThe nickname is too long.'
 already-nicked: '&cYou are already nicked. Please use /unnick to disable your nickname.'
 not-nicked: '&cYou are not nicked.'
 
-have-been-nicked: '&7You are now nicked as &6%newNick%§7.%newLine%You cannot see your nickanem but everyone else does.'
-have-been-unnicked: '&7You have been unnicked.%newLine%All players on the network will see you again normally'
+have-been-nicked: '&7You are now nicked as &6%newNick%§7.%newLine%&7You cannot see your nickanem but everyone else does.'
+have-been-unnicked: '&7You have been unnicked.%newLine%&7All players on the network will see you again normally'
