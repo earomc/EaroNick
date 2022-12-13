@@ -44,9 +44,6 @@ public class NickManager {
      * @return true if it works, false if there was an error.
      */
     public boolean nickPlayer(Player player, String newName) {
-        nickedPlayers.add(player);
-        uuidToOldNameMap.put(player.getUniqueId(), player.getName());
-        uuidToPropertyMap.put(player.getUniqueId(), ((CraftPlayer) player).getHandle().getProfile().getProperties().get("textures").stream().findFirst().orElse(null));
         FileConfiguration config = plugin.getConfig();
         String playerPrefix = config.getString("nicked-name-prefix-tab").replaceAll("&", "§");
 
@@ -57,6 +54,10 @@ public class NickManager {
         try {
             //If the player doesn't exist it will give an error. This will catch it gives player random skin.
             Bukkit.getOfflinePlayer(UUID.fromString(newName));
+
+            nickedPlayers.add(player);
+            uuidToOldNameMap.put(player.getUniqueId(), player.getName());
+            uuidToPropertyMap.put(player.getUniqueId(), ((CraftPlayer) player).getHandle().getProfile().getProperties().get("textures").stream().findFirst().orElse(null));
         } catch (IllegalArgumentException e) {
             player.sendMessage("§cPlayer is null, random skin coming soon");
             return false;
