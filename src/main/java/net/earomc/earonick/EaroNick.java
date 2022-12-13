@@ -10,6 +10,8 @@ import org.bukkit.Bukkit;
 import org.bukkit.plugin.PluginManager;
 import org.bukkit.plugin.java.JavaPlugin;
 
+import java.sql.SQLOutput;
+
 
 public final class EaroNick extends JavaPlugin {
 
@@ -19,7 +21,6 @@ public final class EaroNick extends JavaPlugin {
     @Override
     public void onEnable() {
         // Plugin startup logic
-
         saveDefaultConfig();
         saveResource("messages.yml", false);
 

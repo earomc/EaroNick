@@ -32,9 +32,10 @@ public class NickCommand implements CommandExecutor {
 
         FileConfiguration config = plugin.getConfig();
         ConfigWrapper messageConfig = plugin.getMessageConfig();
+        String prefix = messageConfig.color(messageConfig.getString("prefix"));
 
         if (!player.hasPermission(config.getString("nick-command.permission"))) {
-            player.sendMessage(messageConfig.color(messageConfig.getString("prefix") + messageConfig.getString("no-permission")));
+            player.sendMessage(messageConfig.color(prefix + messageConfig.getString("no-permission")));
             return false;
         }
 
@@ -43,7 +44,6 @@ public class NickCommand implements CommandExecutor {
             return false;
         }
 
-        String prefix = messageConfig.color(messageConfig.getString("prefix"));
         NickManager nickManager = plugin.getNickManager();
 
         if (nickManager.isNicked(player)) {
@@ -56,10 +56,14 @@ public class NickCommand implements CommandExecutor {
             return false;
         }
 
-        if (nickManager.nickPlayer(player, args[0])) {
-            player.sendMessage("§cPlayer is null, random skin coming soon");
+        if (!nickManager.nickPlayer(player, args[0])) {
+            player.sendMessage(messageConfig.color(prefix + messageConfig.getString("error")));
             return false;
         }
+
+        player.sendMessage(messageConfig.color(prefix + messageConfig.getString("have-been-nicked")
+                .replaceAll("%newNick%", args[0])
+                .replaceAll("%newLine%", "\n")));
         return true;
     }
     private void sendCommandUsage(Player player) {

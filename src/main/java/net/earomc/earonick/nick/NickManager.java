@@ -45,29 +45,27 @@ public class NickManager {
      */
     public boolean nickPlayer(Player player, String newName) {
         FileConfiguration config = plugin.getConfig();
-        String playerPrefix = config.getString("nicked-name-prefix-tab").replaceAll("&", "§");
-
+        nickedPlayers.add(player);
+        uuidToOldNameMap.put(player.getUniqueId(), player.getName());
+        uuidToPropertyMap.put(player.getUniqueId(), ((CraftPlayer) player).getHandle().getProfile().getProperties().get("textures").stream().findFirst().orElse(null));
 
         //works if offline player exists
         SkinChanger skinChanger = new SkinChanger(player.getUniqueId());
 
-        try {
-            //If the player doesn't exist it will give an error. This will catch it gives player random skin.
-            Bukkit.getOfflinePlayer(UUID.fromString(newName));
-
-            nickedPlayers.add(player);
-            uuidToOldNameMap.put(player.getUniqueId(), player.getName());
-            uuidToPropertyMap.put(player.getUniqueId(), ((CraftPlayer) player).getHandle().getProfile().getProperties().get("textures").stream().findFirst().orElse(null));
-        } catch (IllegalArgumentException e) {
-            player.sendMessage("§cPlayer is null, random skin coming soon");
-            return false;
+        if (!isValid(newName)) {
+            skinChanger.change(config.getString("default-skin.value"), config.getString("default-skin.signature"));
+            skinChanger.update();
+            return true;
         }
 
-
-        OfflinePlayer targetPlayer = Bukkit.getOfflinePlayer(UUID.fromString(newName));
+        OfflinePlayer targetPlayer = Bukkit.getOfflinePlayer(newName);
         GameProfile targetGameProfile = ((CraftPlayer) targetPlayer.getPlayer()).getHandle().getProfile();
         Property targetProperty = targetGameProfile.getProperties().get("textures").stream().findFirst().orElse(null);
 
+
+        if (targetProperty == null) {
+            return false;
+        }
 
         skinChanger.change(targetProperty.getValue(), targetProperty.getSignature());
         skinChanger.update();
@@ -76,7 +74,6 @@ public class NickManager {
     }
 
     public void unnickPlayer(Player player) {
-        nickedPlayers.remove(player);
 
         //unnick player
         String realName = uuidToOldNameMap.get(player.getUniqueId());
@@ -92,6 +89,7 @@ public class NickManager {
         skinChanger.update();
 
 
+        nickedPlayers.remove(player);
         uuidToOldNameMap.remove(player.getUniqueId());
         uuidToPropertyMap.remove(player.getUniqueId());
 
@@ -132,7 +130,8 @@ public class NickManager {
         }
     }
 
-    private Property getDefaultSkin() {
-        return new Property("texture", plugin.getConfig().getString("default-skin"));
+
+    private boolean isValid(String name) {
+        
     }
 }
