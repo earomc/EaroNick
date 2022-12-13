@@ -46,11 +46,11 @@ public class NickManager {
         //works if offline player exists
         String finalNewName = playerPrefix + newName;
         SkinChanger skinChanger = new SkinChanger(player.getUniqueId());
-        if (Bukkit.getOfflinePlayer(UUID.fromString(newName)) == null) {
+        if (!Bukkit.getOfflinePlayer(UUID.fromString(newName)).getPlayer().isValid()) {
             player.sendMessage("§cPlayer is null, random skin coming soon");
             return;
         }
-        
+
         OfflinePlayer targetPlayer = Bukkit.getOfflinePlayer(UUID.fromString(newName));
         GameProfile targetGameProfile = ((CraftPlayer) targetPlayer.getPlayer()).getHandle().getProfile();
         Property targetProperty = targetGameProfile.getProperties().get("textures").stream().findFirst().orElse(null);
