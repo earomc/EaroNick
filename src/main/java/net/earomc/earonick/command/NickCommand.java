@@ -56,10 +56,10 @@ public class NickCommand implements CommandExecutor {
             return false;
         }
 
-        nickManager.nickPlayer(player, args[0]);
-        player.sendMessage(prefix + messageConfig.color(messageConfig.getString("have-been-nicked", "%newNick%", args[0])
-                .replaceAll("%newLine%", "\n" + prefix)));
-
+        if (nickManager.nickPlayer(player, args[0])) {
+            player.sendMessage("§cPlayer is null, random skin coming soon");
+            return false;
+        }
         return true;
     }
     private void sendCommandUsage(Player player) {

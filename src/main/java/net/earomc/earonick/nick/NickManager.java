@@ -36,7 +36,14 @@ public class NickManager {
     private final HashMap<UUID, String> uuidToOldNameMap = new HashMap<>();
     private final HashMap<UUID, Property> uuidToPropertyMap = new HashMap<>();
 
-    public void nickPlayer(Player player, String newName) {
+
+    /**
+     *
+     * @param player player that you would like to nick.
+     * @param newName the players new nickname.
+     * @return true if it works, false if there was an error.
+     */
+    public boolean nickPlayer(Player player, String newName) {
         nickedPlayers.add(player);
         uuidToOldNameMap.put(player.getUniqueId(), player.getName());
         uuidToPropertyMap.put(player.getUniqueId(), ((CraftPlayer) player).getHandle().getProfile().getProperties().get("textures").stream().findFirst().orElse(null));
@@ -45,15 +52,14 @@ public class NickManager {
 
 
         //works if offline player exists
-        String finalNewName = playerPrefix + newName;
         SkinChanger skinChanger = new SkinChanger(player.getUniqueId());
 
         try {
             //If the player doesn't exist it will give an error. This will catch it gives player random skin.
-            Bukkit.getOfflinePlayer(UUID.fromString(newName)).hasPlayedBefore();
+            Bukkit.getOfflinePlayer(UUID.fromString(newName));
         } catch (IllegalArgumentException e) {
             player.sendMessage("§cPlayer is null, random skin coming soon");
-            return;
+            return false;
         }
 
 
@@ -64,6 +70,8 @@ public class NickManager {
 
         skinChanger.change(targetProperty.getValue(), targetProperty.getSignature());
         skinChanger.update();
+
+        return true;
     }
 
     public void unnickPlayer(Player player) {
