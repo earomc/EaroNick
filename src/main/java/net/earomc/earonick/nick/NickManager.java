@@ -53,7 +53,7 @@ public class NickManager {
         //works if offline player exists
         SkinChanger skinChanger = new SkinChanger(player.getUniqueId());
 
-        if (!isValid(newName)) {
+        if (UUIDFetcher.getUUID(newName) == null) {
             skinChanger.change(config.getString("default-skin.value"), config.getString("default-skin.signature"));
             skinChanger.update();
             return true;
@@ -131,13 +131,4 @@ public class NickManager {
         }
     }
 
-
-    /**
-     *
-     * @param name name of the player / OfflinePlayer
-     * @return returns true if OfflinePlayer (name) exists, returns false if OfflinePlayer (name) doesn't exist.
-     */
-    private boolean isValid(String name) {
-        return UUIDFetcher.getUUID(name) != null;
-    }
 }
