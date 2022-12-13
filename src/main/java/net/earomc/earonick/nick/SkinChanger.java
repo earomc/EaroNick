@@ -33,22 +33,6 @@ public class SkinChanger {
         pm.put("textures", new Property(value, signature));
     }
 
-    /*
-    public void changeUsername(String username) {
-        try {
-            Field profileField = this.profile.getClass().getDeclaredField("name");
-            profileField.setAccessible(true);
-
-            final sun.misc.Unsafe unsafe = (sun.misc.Unsafe) profileField.get(null);
-            final Object staticFieldBase = unsafe.staticFieldBase(profileField);
-            final long staticFieldOffset = unsafe.staticFieldOffset(profileField);
-            unsafe.putObject(staticFieldBase, staticFieldOffset, username);
-        } catch (NoSuchFieldException | IllegalArgumentException | IllegalAccessException e) {
-            e.printStackTrace();
-        } catch (SecurityException se) {
-            // Ignored
-        }
-    }*/
 
     public void update() {
         Player modifiedPlayer = Bukkit.getPlayer(this.uuid);

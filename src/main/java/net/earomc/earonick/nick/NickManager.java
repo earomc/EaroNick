@@ -33,10 +33,12 @@ public class NickManager {
 
     private final HashSet<Player> nickedPlayers = new HashSet<>();
     private final HashMap<UUID, String> uuidToOldNameMap = new HashMap<>();
+    private final HashMap<UUID, Property> uuidToPropertyMap = new HashMap<>();
 
     public void nickPlayer(Player player, String newName) {
         nickedPlayers.add(player);
         uuidToOldNameMap.put(player.getUniqueId(), player.getName());
+        uuidToPropertyMap.put(player.getUniqueId(), ((CraftPlayer) player).getHandle().getProfile().getProperties().get("textures").stream().findFirst().orElse(null));
         FileConfiguration config = plugin.getConfig();
         String playerPrefix = config.getString("nicked-name-prefix-tab").replaceAll("&", "§");
 
@@ -44,16 +46,22 @@ public class NickManager {
         //works if offline player exists
         String finalNewName = playerPrefix + newName;
         SkinChanger skinChanger = new SkinChanger(player.getUniqueId());
+        if (Bukkit.getOfflinePlayer(UUID.fromString(newName)) == null) {
+            player.sendMessage("§cPlayer is null, random skin coming soon");
+            return;
+        }
+        
         OfflinePlayer targetPlayer = Bukkit.getOfflinePlayer(UUID.fromString(newName));
+        GameProfile targetGameProfile = ((CraftPlayer) targetPlayer.getPlayer()).getHandle().getProfile();
+        Property targetProperty = targetGameProfile.getProperties().get("textures").stream().findFirst().orElse(null);
 
-        //I don't have time... please fill in the change() method
-        skinChanger.change();
+
+        skinChanger.change(targetProperty.getValue(), targetProperty.getSignature());
         skinChanger.update();
     }
 
     public void unnickPlayer(Player player) {
         nickedPlayers.remove(player);
-
 
         //unnick player
         String realName = uuidToOldNameMap.get(player.getUniqueId());
@@ -65,12 +73,12 @@ public class NickManager {
 
         SkinChanger skinChanger = new SkinChanger(player.getUniqueId());
 
-        //I don't have time... please fill in the change() method
-        skinChanger.change();
+        skinChanger.change(uuidToPropertyMap.get(player.getUniqueId()).getValue(), uuidToPropertyMap.get(player.getUniqueId()).getSignature());
         skinChanger.update();
 
 
         uuidToOldNameMap.remove(player.getUniqueId());
+        uuidToPropertyMap.remove(player.getUniqueId());
 
     }
 
@@ -84,8 +92,8 @@ public class NickManager {
     }
 
     public void changeNameTag(Player player, String newName) {
-        for(Player currentPlayer : Bukkit.getOnlinePlayers()){
-            if(currentPlayer == player) continue;
+        for (Player currentPlayer : Bukkit.getOnlinePlayers()) {
+            if (currentPlayer == player) continue;
             //REMOVES THE PLAYER
             ((CraftPlayer) currentPlayer).getHandle().playerConnection.sendPacket(new PacketPlayOutPlayerInfo(PacketPlayOutPlayerInfo.EnumPlayerInfoAction.REMOVE_PLAYER, ((CraftPlayer) player).getHandle()));
             //CHANGES THE PLAYER'S GAME PROFILE
@@ -109,31 +117,7 @@ public class NickManager {
         }
     }
 
-    private UUID getUUID(String name) {
-        return Bukkit.getOfflinePlayer(name).getUniqueId();
-    }
-
     private Property getDefaultSkin() {
         return new Property("texture", plugin.getConfig().getString("default-skin"));
-    }
-    private void refreshPlayer(Player player) {
-        Bukkit.getScheduler().runTaskLater(plugin, () -> {
-            for (Player onlinePlayer : Bukkit.getOnlinePlayers()) {
-                onlinePlayer.hidePlayer(player);
-            }
-        }, 1);
-
-        Bukkit.getScheduler().runTaskLater(plugin, () -> {
-            for (Player onlinePlayer : Bukkit.getOnlinePlayers()) {
-                onlinePlayer.showPlayer(player);
-            }
-        }, 20);
-    }
-
-    public OfflinePlayer getOfflinePlayer(String name) {
-        for(OfflinePlayer player : Bukkit.getOfflinePlayers()) {
-            if(player.getName().equals(name)) return player;
-        }
-        return null;
     }
 }
