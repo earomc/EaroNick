@@ -131,6 +131,11 @@ public class NickManager {
     }
 
 
+    /**
+     *
+     * @param name name of the player / OfflinePlayer
+     * @return returns true if OfflinePlayer (name) exists, returns false if OfflinePlayer (name) doesn't exist.
+     */
     private boolean isValid(String name) {
         
     }

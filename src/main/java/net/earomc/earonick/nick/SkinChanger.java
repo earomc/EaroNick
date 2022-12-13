@@ -35,7 +35,12 @@ public class SkinChanger {
 
 
     public void update() {
-        Player modifiedPlayer = Bukkit.getPlayer(this.uuid);
+        for (Player onlinePlayer : Bukkit.getOnlinePlayers()) {
+            onlinePlayer.hidePlayer((Player) entityPlayer);
+            onlinePlayer.showPlayer((Player) entityPlayer);
+        }
+
+        /*Player modifiedPlayer = Bukkit.getPlayer(this.uuid);
         PacketPlayOutPlayerInfo removeInfo = new PacketPlayOutPlayerInfo(PacketPlayOutPlayerInfo.EnumPlayerInfoAction.REMOVE_PLAYER, this.entityPlayer);
         PacketPlayOutEntityDestroy destroyEntity = new PacketPlayOutEntityDestroy(new int[] {Bukkit.getPlayer(this.uuid).getEntityId()});
         PacketPlayOutNamedEntitySpawn addNamed = new PacketPlayOutNamedEntitySpawn(this.entityPlayer);
@@ -49,7 +54,7 @@ public class SkinChanger {
             ((CraftPlayer)p).getHandle().playerConnection.sendPacket(respawn);
             p.hidePlayer(modifiedPlayer);
             p.showPlayer(modifiedPlayer);
-        }
+        }*/
     }
 
 }
