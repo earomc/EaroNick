@@ -3,6 +3,7 @@ package net.earomc.earonick.nick;
 import com.mojang.authlib.GameProfile;
 import com.mojang.authlib.properties.Property;
 import net.earomc.earonick.EaroNick;
+import net.earomc.earonick.UUIDFetcher;
 import net.minecraft.server.v1_8_R3.PacketPlayOutEntityDestroy;
 import net.minecraft.server.v1_8_R3.PacketPlayOutNamedEntitySpawn;
 import net.minecraft.server.v1_8_R3.PacketPlayOutPlayerInfo;
@@ -137,6 +138,6 @@ public class NickManager {
      * @return returns true if OfflinePlayer (name) exists, returns false if OfflinePlayer (name) doesn't exist.
      */
     private boolean isValid(String name) {
-        
+        return UUIDFetcher.getUUID(name) != null;
     }
 }
