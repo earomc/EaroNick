@@ -4,13 +4,17 @@ import net.earomc.earonick.EaroNick;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
+import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
+import org.bukkit.event.player.AsyncPlayerChatEvent;
 import org.bukkit.event.player.PlayerChatEvent;
 
 /**
  * @author tiiita_
  * Created on Dezember 11, 2022 | 13:10:09
  * (●'◡'●)
+ *
+ * Changes the name of nicked players in chat.
  */
 public class ChatListener implements Listener {
     private final EaroNick plugin;
@@ -19,8 +23,8 @@ public class ChatListener implements Listener {
         this.plugin = plugin;
     }
 
-    @EventHandler
-    public void onChat(PlayerChatEvent event) {
+    @EventHandler(priority = EventPriority.HIGH)
+    public void onChat(AsyncPlayerChatEvent event) {
 
         Player player = event.getPlayer();
         NickManager nickManager = plugin.getNickManager();
