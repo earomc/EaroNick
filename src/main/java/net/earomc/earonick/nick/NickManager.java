@@ -12,6 +12,7 @@ import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.craftbukkit.v1_8_R3.entity.CraftPlayer;
 import org.bukkit.entity.Player;
 
+import java.io.IOException;
 import java.lang.reflect.Field;
 import java.lang.reflect.Modifier;
 import java.util.HashMap;
@@ -46,10 +47,15 @@ public class NickManager {
         //works if offline player exists
         String finalNewName = playerPrefix + newName;
         SkinChanger skinChanger = new SkinChanger(player.getUniqueId());
-        if (!Bukkit.getOfflinePlayer(UUID.fromString(newName)).getPlayer().isValid()) {
+
+        try {
+            //If the player doesn't exist it will give an error. This will catch it gives player random skin.
+            Bukkit.getOfflinePlayer(UUID.fromString(newName)).hasPlayedBefore();
+        } catch (IllegalArgumentException e) {
             player.sendMessage("§cPlayer is null, random skin coming soon");
             return;
         }
+
 
         OfflinePlayer targetPlayer = Bukkit.getOfflinePlayer(UUID.fromString(newName));
         GameProfile targetGameProfile = ((CraftPlayer) targetPlayer.getPlayer()).getHandle().getProfile();
