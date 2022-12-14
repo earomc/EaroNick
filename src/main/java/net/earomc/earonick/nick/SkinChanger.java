@@ -16,15 +16,12 @@ import java.util.UUID;
  * (●'◡'●)
  */
 public class SkinChanger {
-
-    private UUID uuid;
-    private EntityPlayer entityPlayer;
     private GameProfile profile;
+    Player player;
 
-    public SkinChanger(UUID uuid) {
-        this.uuid = uuid;
-        this.profile = ((CraftPlayer) Bukkit.getPlayer(uuid)).getProfile();
-        this.entityPlayer = ((CraftPlayer)Bukkit.getPlayer(uuid)).getHandle();
+    public SkinChanger(Player player) {
+        this.player = player;
+        this.profile = ((CraftPlayer) player).getProfile();
     }
 
     public void change(String value, String signature) {
@@ -36,25 +33,8 @@ public class SkinChanger {
 
     public void update() {
         for (Player onlinePlayer : Bukkit.getOnlinePlayers()) {
-            onlinePlayer.hidePlayer((Player) entityPlayer);
-            onlinePlayer.showPlayer((Player) entityPlayer);
+            onlinePlayer.hidePlayer(player);
+            onlinePlayer.showPlayer(player);
         }
-
-        /*Player modifiedPlayer = Bukkit.getPlayer(this.uuid);
-        PacketPlayOutPlayerInfo removeInfo = new PacketPlayOutPlayerInfo(PacketPlayOutPlayerInfo.EnumPlayerInfoAction.REMOVE_PLAYER, this.entityPlayer);
-        PacketPlayOutEntityDestroy destroyEntity = new PacketPlayOutEntityDestroy(new int[] {Bukkit.getPlayer(this.uuid).getEntityId()});
-        PacketPlayOutNamedEntitySpawn addNamed = new PacketPlayOutNamedEntitySpawn(this.entityPlayer);
-        PacketPlayOutPlayerInfo addInfo = new PacketPlayOutPlayerInfo(PacketPlayOutPlayerInfo.EnumPlayerInfoAction.ADD_PLAYER, this.entityPlayer);
-        PacketPlayOutRespawn respawn = new PacketPlayOutRespawn(this.entityPlayer.dimension, this.entityPlayer.getWorld().getDifficulty(), this.entityPlayer.getWorld().getWorldData().getType(), this.entityPlayer.playerInteractManager.getGameMode());
-        for (Player p: Bukkit.getOnlinePlayers()) {
-            ((CraftPlayer)p).getHandle().playerConnection.sendPacket(removeInfo);
-            ((CraftPlayer)p).getHandle().playerConnection.sendPacket(destroyEntity);
-            ((CraftPlayer)p).getHandle().playerConnection.sendPacket(addNamed);
-            ((CraftPlayer)p).getHandle().playerConnection.sendPacket(addInfo);
-            ((CraftPlayer)p).getHandle().playerConnection.sendPacket(respawn);
-            p.hidePlayer(modifiedPlayer);
-            p.showPlayer(modifiedPlayer);
-        }*/
     }
-
 }
