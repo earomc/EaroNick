@@ -1,4 +1,4 @@
-package net.earomc.earonick.nick;
+package net.earomc.earonick;
 
 import com.mojang.authlib.GameProfile;
 import com.mojang.authlib.properties.Property;
@@ -8,6 +8,9 @@ import org.bukkit.Bukkit;
 import org.bukkit.craftbukkit.v1_8_R3.entity.CraftPlayer;
 import org.bukkit.entity.Player;
 
+import java.net.HttpURLConnection;
+import java.net.MalformedURLException;
+import java.net.URL;
 import java.util.UUID;
 
 /**
@@ -16,22 +19,21 @@ import java.util.UUID;
  * (●'◡'●)
  */
 public class SkinChanger {
-    private GameProfile profile;
-    Player player;
 
-    public SkinChanger(Player player) {
-        this.player = player;
-        this.profile = ((CraftPlayer) player).getProfile();
+    public Property getPlayerProperty(String name) {
+        
+
     }
+    public void change(Player player, String value, String signature) {
 
-    public void change(String value, String signature) {
-        PropertyMap pm = this.profile.getProperties();
+        GameProfile profile = ((CraftPlayer)player).getHandle().getProfile();
+        PropertyMap pm = profile.getProperties();
         pm.remove("textures", pm.get("textures").iterator().next());
         pm.put("textures", new Property(value, signature));
     }
 
 
-    public void update() {
+    public void update(Player player) {
         for (Player onlinePlayer : Bukkit.getOnlinePlayers()) {
             onlinePlayer.hidePlayer(player);
             onlinePlayer.showPlayer(player);

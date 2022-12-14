@@ -3,10 +3,9 @@ package net.earomc.earonick.nick;
 import com.mojang.authlib.GameProfile;
 import com.mojang.authlib.properties.Property;
 import net.earomc.earonick.EaroNick;
-import net.earomc.earonick.UUIDFetcher;
+import net.earomc.earonick.SkinChanger;
 import net.minecraft.server.v1_8_R3.*;
 import org.bukkit.Bukkit;
-import org.bukkit.OfflinePlayer;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.craftbukkit.v1_8_R3.entity.CraftPlayer;
 import org.bukkit.entity.Player;
@@ -41,32 +40,25 @@ public class NickManager {
      * @param newName the players new nickname.
      * @return true if it works, false if there was an error.
      */
-    public boolean nickPlayer(Player player, String newName) {
+    public boolean nickPlayer(Player player, String newName) throws Exception {
         FileConfiguration config = plugin.getConfig();
         nickedPlayers.add(player);
         uuidToOldNameMap.put(player.getUniqueId(), player.getName());
         uuidToPropertyMap.put(player.getUniqueId(), ((CraftPlayer) player).getHandle().getProfile().getProperties().get("textures").stream().findFirst().orElse(null));
 
         //works if offline player exists
-        SkinChanger skinChanger = new SkinChanger(player.getUniqueId());
+        SkinChanger skinChanger = plugin.getSkinChanger();
 
-        if (UUIDFetcher.getUUID(newName) == null) {
-            skinChanger.change(config.getString("default-skin.value"), config.getString("default-skin.signature"));
-            skinChanger.update();
+        if (skinChanger.getPlayerProperty(newName) == null) {
+            skinChanger.change(player, config.getString("default-skin.value"), config.getString("default-skin.signature"));
+            skinChanger.update(player);
             return true;
         }
 
-        OfflinePlayer targetPlayer = Bukkit.getOfflinePlayer(newName);
-        GameProfile targetGameProfile = ((CraftPlayer) targetPlayer.getPlayer()).getHandle().getProfile();
-        Property targetProperty = targetGameProfile.getProperties().get("textures").stream().findFirst().orElse(null);
 
-
-        if (targetProperty == null) {
-            return false;
-        }
-
-        skinChanger.change(targetProperty.getValue(), targetProperty.getSignature());
-        skinChanger.update();
+        Property targetProperty = skinChanger.getPlayerProperty(newName);
+        skinChanger.change(player, targetProperty.getValue(), targetProperty.getSignature());
+        skinChanger.update(player);
 
         return true;
     }
@@ -81,7 +73,7 @@ public class NickManager {
 
         changeNameTag(player, realName);
 
-        SkinChanger skinChanger = new SkinChanger(player.getUniqueId());
+        SkinChanger skinChanger = new SkinChanger(player);
 
         skinChanger.change(uuidToPropertyMap.get(player.getUniqueId()).getValue(), uuidToPropertyMap.get(player.getUniqueId()).getSignature());
         skinChanger.update();

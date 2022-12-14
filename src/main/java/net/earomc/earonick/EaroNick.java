@@ -17,6 +17,7 @@ public final class EaroNick extends JavaPlugin {
 
     private NickManager nickManager;
     private ConfigWrapper messageConfig;
+    private SkinChanger skinChanger;
 
     @Override
     public void onEnable() {
@@ -24,6 +25,7 @@ public final class EaroNick extends JavaPlugin {
         saveDefaultConfig();
         saveResource("messages.yml", false);
 
+        skinChanger = new SkinChanger();
         messageConfig = new ConfigWrapper("messages.yml", getDataFolder(), this);
 
         nickManager = new NickManager(this);
@@ -58,4 +60,7 @@ public final class EaroNick extends JavaPlugin {
         return messageConfig;
     }
 
+    public SkinChanger getSkinChanger() {
+        return skinChanger;
+    }
 }
