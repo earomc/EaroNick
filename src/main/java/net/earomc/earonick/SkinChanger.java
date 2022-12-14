@@ -21,7 +21,7 @@ import java.util.UUID;
 public class SkinChanger {
 
     public Property getPlayerProperty(String name) {
-        
+
 
     }
     public void change(Player player, String value, String signature) {

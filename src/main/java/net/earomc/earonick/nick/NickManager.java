@@ -73,10 +73,10 @@ public class NickManager {
 
         changeNameTag(player, realName);
 
-        SkinChanger skinChanger = new SkinChanger(player);
+        SkinChanger skinChanger = plugin.getSkinChanger();
 
-        skinChanger.change(uuidToPropertyMap.get(player.getUniqueId()).getValue(), uuidToPropertyMap.get(player.getUniqueId()).getSignature());
-        skinChanger.update();
+        skinChanger.change(player, uuidToPropertyMap.get(player.getUniqueId()).getValue(), uuidToPropertyMap.get(player.getUniqueId()).getSignature());
+        skinChanger.update(player);
 
 
         nickedPlayers.remove(player);
