@@ -4,16 +4,13 @@ import com.mojang.authlib.GameProfile;
 import com.mojang.authlib.properties.Property;
 import net.earomc.earonick.EaroNick;
 import net.earomc.earonick.UUIDFetcher;
-import net.minecraft.server.v1_8_R3.PacketPlayOutEntityDestroy;
-import net.minecraft.server.v1_8_R3.PacketPlayOutNamedEntitySpawn;
-import net.minecraft.server.v1_8_R3.PacketPlayOutPlayerInfo;
+import net.minecraft.server.v1_8_R3.*;
 import org.bukkit.Bukkit;
 import org.bukkit.OfflinePlayer;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.craftbukkit.v1_8_R3.entity.CraftPlayer;
 import org.bukkit.entity.Player;
 
-import java.io.IOException;
 import java.lang.reflect.Field;
 import java.lang.reflect.Modifier;
 import java.util.HashMap;
@@ -105,30 +102,40 @@ public class NickManager {
         return player.getDisplayName();
     }
 
-    public void changeNameTag(Player player, String newName) {
+    public void changeNameTag(Player playerToBeChanged, String newName) {
+        EntityPlayer nmsPlayerToBeChanged = getNMSPlayer(playerToBeChanged);
+
+        //MODIFY THE PLAYER'S GAME PROFILE
+        GameProfile gameProfile = nmsPlayerToBeChanged.getProfile();
+        try {
+            Field nameField = GameProfile.class.getDeclaredField("name");
+            nameField.setAccessible(true);
+
+            Field modifiersField = Field.class.getDeclaredField("modifiers");
+            modifiersField.setAccessible(true);
+            modifiersField.setInt(nameField, nameField.getModifiers() & ~Modifier.FINAL);
+
+            nameField.set(gameProfile, newName);
+        } catch (IllegalAccessException | NoSuchFieldException ex) {
+            throw new IllegalStateException(ex);
+        }
+
         for (Player currentPlayer : Bukkit.getOnlinePlayers()) {
-            if (currentPlayer == player) continue;
-            //REMOVES THE PLAYER
-            ((CraftPlayer) currentPlayer).getHandle().playerConnection.sendPacket(new PacketPlayOutPlayerInfo(PacketPlayOutPlayerInfo.EnumPlayerInfoAction.REMOVE_PLAYER, ((CraftPlayer) player).getHandle()));
-            //CHANGES THE PLAYER'S GAME PROFILE
-            GameProfile gameProfile = ((CraftPlayer) player).getProfile();
-            try {
-                Field nameField = GameProfile.class.getDeclaredField("name");
-                nameField.setAccessible(true);
+            if (currentPlayer == playerToBeChanged) continue;
+            EntityPlayer currentNMSPlayer = getNMSPlayer(currentPlayer);
+            PlayerConnection currentPlayerConnection = currentNMSPlayer.playerConnection;
+            //"REMOVE" THE PLAYER FOR EACH ONLINE PLAYER
+            currentPlayerConnection.sendPacket(new PacketPlayOutPlayerInfo(PacketPlayOutPlayerInfo.EnumPlayerInfoAction.REMOVE_PLAYER, nmsPlayerToBeChanged));
+            currentPlayerConnection.sendPacket(new PacketPlayOutEntityDestroy(playerToBeChanged.getEntityId()));
 
-                Field modifiersField = Field.class.getDeclaredField("modifiers");
-                modifiersField.setAccessible(true);
-                modifiersField.setInt(nameField, nameField.getModifiers() & ~Modifier.FINAL);
 
-                nameField.set(gameProfile, newName);
-            } catch (IllegalAccessException | NoSuchFieldException ex) {
-                throw new IllegalStateException(ex);
-            }
-            //ADDS THE PLAYER
-            ((CraftPlayer) currentPlayer).getHandle().playerConnection.sendPacket(new PacketPlayOutPlayerInfo(PacketPlayOutPlayerInfo.EnumPlayerInfoAction.ADD_PLAYER, ((CraftPlayer) player).getHandle()));
-            ((CraftPlayer) currentPlayer).getHandle().playerConnection.sendPacket(new PacketPlayOutEntityDestroy(player.getEntityId()));
-            ((CraftPlayer) currentPlayer).getHandle().playerConnection.sendPacket(new PacketPlayOutNamedEntitySpawn(((CraftPlayer) player).getHandle()));
+            //RE-ADD THE PLAYER
+            currentPlayerConnection.sendPacket(new PacketPlayOutPlayerInfo(PacketPlayOutPlayerInfo.EnumPlayerInfoAction.ADD_PLAYER, nmsPlayerToBeChanged));
+            currentPlayerConnection.sendPacket(new PacketPlayOutNamedEntitySpawn(nmsPlayerToBeChanged));
         }
     }
 
+    private EntityPlayer getNMSPlayer(Player player) {
+        return ((CraftPlayer) player).getHandle();
+    }
 }
