@@ -154,4 +154,7 @@ public class NickManager {
         }
     }
 
+    public Set<Player> getNickedPlayers() {
+        return nickedPlayers;
+    }
 }
