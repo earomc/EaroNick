@@ -38,39 +38,49 @@ public class NickCommand implements CommandExecutor {
             return true;
         }
 
-        if (args.length != 1) {
-            return false;
-        }
-
         NickManager nickManager = plugin.getNickManager();
 
-        if (nickManager.isNicked(player)) {
-            player.sendMessage(prefix + messageConfig.getString("already-nicked"));
-            return true;
-        }
-
-        String newNick = args[0];
-        if (newNick.length() >= 16) {
-            player.sendMessage(prefix + messageConfig.getString("nickname-too-long"));
-            return true;
-        }
 
         String nickedWithDefaultSkinWarning = messageConfig.getString("nicked-with-default-skin-warning")
                 .replaceAll("%newLine%", "\n" + prefix);
         String nickSuccessfulMessage = messageConfig.getString("have-been-nicked").replaceAll("%newLine%", "\n" + prefix);
 
         String errorMessage = messageConfig.getString("error");
-        nickManager.nickPlayerAsync(player, newNick).whenComplete((fetchedSkin, throwable) -> {
+
+        BiConsumer<NickManager.NickResult, Throwable> action = (nickResult, throwable) -> {
             if (throwable != null) {
                 throwable.printStackTrace();
                 player.sendMessage(prefix + errorMessage.replaceAll("%error%", throwable.getCause().getClass().getName() + throwable.getMessage()));
             } else {
-                player.sendMessage(prefix + nickSuccessfulMessage.replaceAll("%newNick%", newNick));
-                if (!fetchedSkin) {
-                    player.sendMessage(prefix + nickedWithDefaultSkinWarning.replaceAll("%newNick%", newNick));
+                player.sendMessage(prefix + nickSuccessfulMessage.replaceAll("%newNick%", nickResult.newName));
+                if (!nickResult.fetchSuccessful) {
+                    player.sendMessage(prefix + nickedWithDefaultSkinWarning.replaceAll("%newNick%", nickResult.newName));
                 }
             }
-        });
+        };
+
+        switch (args.length) {
+            case 0: {
+                if (nickManager.isNicked(player)) {
+                    player.sendMessage(prefix + messageConfig.getString("already-nicked"));
+                    return true;
+                }
+                nickManager.randomNickPlayerAsync(player).whenComplete(action);
+                break;
+            }
+            case 1:
+                if (nickManager.isNicked(player)) {
+                    player.sendMessage(prefix + messageConfig.getString("already-nicked"));
+                    return true;
+                }
+                String newNick = args[0];
+                if (newNick.length() >= 16) {
+                    player.sendMessage(prefix + messageConfig.getString("nickname-too-long"));
+                    return true;
+                }
+                nickManager.nickPlayerAsync(player, newNick).whenComplete(action);
+                break;
+        }
 
         return true;
     }

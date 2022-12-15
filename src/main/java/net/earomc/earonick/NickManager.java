@@ -73,7 +73,22 @@ public class NickManager {
         return fetchSuccessful;
     }
 
-    public CompletableFuture<Boolean> nickPlayerAsync(Player player, String newName) {
+
+    public NickResult randomNickPlayer(Player player) throws MojangAPIException {
+        return nickPlayer(player, MojangAPI.requestName(plugin.getUuidDatabase().getRandomUUID()));
+    }
+
+    public CompletableFuture<NickResult> randomNickPlayerAsync(Player player) {
+        return CompletableFuture.supplyAsync(() -> {
+            try {
+                return randomNickPlayer(player);
+            } catch (MojangAPIException e) {
+                throw new RuntimeException(e);
+            }
+        });
+    }
+
+    public CompletableFuture<NickResult> nickPlayerAsync(Player player, String newName) {
         return CompletableFuture.supplyAsync(() -> nickPlayer(player, newName));
     }
 

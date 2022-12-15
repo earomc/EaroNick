@@ -18,6 +18,7 @@ public class ConnectionListener implements Listener {
         this.plugin = plugin;
     }
 
+
     @EventHandler
     public void onQuit(PlayerQuitEvent event) {
         Player player = event.getPlayer();
