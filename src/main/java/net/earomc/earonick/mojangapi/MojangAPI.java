@@ -58,6 +58,10 @@ public class MojangAPI {
         return uuidFromString((String) jsonObject.get("id"));
     }
 
+    public static String requestName(UUID uuid) throws MojangAPIException {
+        return requestProfile(uuid).name;
+    }
+
     /**
      * Method to turn a UUID object to a UUID String.
      * Differs from the Standard {@link UUID}#toString(s) method in that it returns the String without dashes needed for the Mojang API http request.
