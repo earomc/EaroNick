@@ -19,9 +19,10 @@ import java.util.logging.Level;
 public class ConfigWrapper {
     private final EaroNick plugin;
 
-    private YamlConfiguration fileConfiguration;
+    private final YamlConfiguration fileConfiguration;
     private final File file;
 
+    @SuppressWarnings("ResultOfMethodCallIgnored")
     public ConfigWrapper(String name, File path, EaroNick plugin) {
         this.plugin = plugin;
         file = new File(path, name);

@@ -1,7 +1,7 @@
 package net.earomc.earonick.command;
 
 import net.earomc.earonick.EaroNick;
-import net.earomc.earonick.nick.NickManager;
+import net.earomc.earonick.NickManager;
 import net.earomc.earonick.config.ConfigWrapper;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;

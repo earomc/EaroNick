@@ -1,10 +1,8 @@
-package net.earomc.earonick.nick;
+package net.earomc.earonick;
 
-import net.earomc.earonick.EaroNick;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
-import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
 
 /**
@@ -18,11 +16,6 @@ public class ConnectionListener implements Listener {
 
     public ConnectionListener(EaroNick plugin) {
         this.plugin = plugin;
-    }
-
-    @EventHandler
-    public void onJoin(PlayerJoinEvent event) {
-
     }
 
     @EventHandler

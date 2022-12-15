@@ -1,9 +1,13 @@
 name: EaroNick
 version: '${project.version}'
 main: net.earomc.earonick.EaroNick
-authors: [ tiiita ]
-description: Nick system for EaroMC.net network
+authors: [ tiiita, earomc ]
+description: Nick system for EaroMC.net
 
 commands:
   nick:
+    permission: global.command.nick
+    usage: '§c/nick <nickname>'
   unnick:
+    permission: global.command.nick
+    usage: '§c/unnick'

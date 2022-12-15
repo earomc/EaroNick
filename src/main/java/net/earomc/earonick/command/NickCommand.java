@@ -1,12 +1,11 @@
 package net.earomc.earonick.command;
 
 import net.earomc.earonick.EaroNick;
-import net.earomc.earonick.nick.NickManager;
 import net.earomc.earonick.config.ConfigWrapper;
+import net.earomc.earonick.NickManager;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
-import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.entity.Player;
 
 /**
@@ -22,54 +21,57 @@ public class NickCommand implements CommandExecutor {
         this.plugin = plugin;
     }
 
+    //The boolean returned by onCommand method indicates whether the usage message given in the plugin.yml should be sent or not.
     @Override
     public boolean onCommand(CommandSender sender, Command command, String label, String[] args) {
         if (!(sender instanceof Player)) {
+            sender.sendMessage("§cThis command can only be executed by a player!");
             return false;
         }
-
         Player player = (Player) sender;
 
-        FileConfiguration config = plugin.getConfig();
         ConfigWrapper messageConfig = plugin.getMessageConfig();
-        String prefix = messageConfig.color(messageConfig.getString("prefix"));
+        String prefix = messageConfig.getString("prefix");
 
-        if (!player.hasPermission(config.getString("nick-command.permission"))) {
-            player.sendMessage(messageConfig.color(prefix + messageConfig.getString("no-permission")));
-            return false;
+        if (!player.hasPermission(command.getPermission())) {
+            player.sendMessage(prefix + messageConfig.getString("no-permission"));
+            return true;
         }
 
         if (args.length != 1) {
-            sendCommandUsage(player);
             return false;
         }
 
         NickManager nickManager = plugin.getNickManager();
 
         if (nickManager.isNicked(player)) {
-            player.sendMessage(prefix + messageConfig.color(messageConfig.getString("already-nicked")));
-            return false;
+            player.sendMessage(prefix + messageConfig.getString("already-nicked"));
+            return true;
         }
 
-        if (args[0].length() >= 16) {
-            player.sendMessage(prefix + messageConfig.color(messageConfig.getString("nickname-too-long")));
-            return false;
+        String newNick = args[0];
+        if (newNick.length() >= 16) {
+            player.sendMessage(prefix + messageConfig.getString("nickname-too-long"));
+            return true;
         }
 
-        if (!nickManager.nickPlayer(player, args[0])) {
-            player.sendMessage(messageConfig.color(prefix + messageConfig.getString("error")));
-            return false;
-        }
+        String nickedWithDefaultSkinWarning = messageConfig.getString("nicked-with-default-skin-warning")
+                .replaceAll("%newLine%", "\n");
+        String nickSuccessfulMessage = prefix + messageConfig.getString("have-been-nicked").replaceAll("%newLine%", "\n");
 
-        player.sendMessage(messageConfig.color(prefix + messageConfig.getString("have-been-nicked")
-                .replaceAll("%newNick%", args[0])
-                .replaceAll("%newLine%", "\n")));
+        String errorMessage = prefix + messageConfig.getString("error");
+        nickManager.nickPlayerAsync(player, newNick).whenComplete((fetchedSkin, throwable) -> {
+            if (throwable != null) {
+                throwable.printStackTrace();
+                player.sendMessage(errorMessage.replaceAll("%error%", throwable.getCause().getClass().getName() + throwable.getMessage()));
+            } else {
+                player.sendMessage(nickSuccessfulMessage.replaceAll("%newNick%", newNick));
+                if (!fetchedSkin) {
+                    player.sendMessage(nickedWithDefaultSkinWarning.replaceAll("%newNick%", newNick));
+                }
+            }
+        });
+
         return true;
-    }
-    private void sendCommandUsage(Player player) {
-
-        for (String currentMessage : plugin.getConfig().getStringList("nick-command.usage")) {
-            player.sendMessage(currentMessage.replaceAll("&", "§"));
-        }
     }
 }

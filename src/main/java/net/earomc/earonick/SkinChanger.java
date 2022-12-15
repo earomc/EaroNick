@@ -1,17 +1,13 @@
 package net.earomc.earonick;
 
 import com.mojang.authlib.GameProfile;
-import com.mojang.authlib.properties.Property;
 import com.mojang.authlib.properties.PropertyMap;
-import net.minecraft.server.v1_8_R3.*;
+import net.earomc.earonick.mojangapi.Skin;
 import org.bukkit.Bukkit;
 import org.bukkit.craftbukkit.v1_8_R3.entity.CraftPlayer;
 import org.bukkit.entity.Player;
-
-import java.net.HttpURLConnection;
-import java.net.MalformedURLException;
-import java.net.URL;
-import java.util.UUID;
+import org.bukkit.plugin.Plugin;
+import org.jetbrains.annotations.NotNull;
 
 /**
  * @author tiiita_
@@ -20,20 +16,27 @@ import java.util.UUID;
  */
 public class SkinChanger {
 
-    public Property getPlayerProperty(String name) {
+    private final Plugin plugin;
 
-
+    public SkinChanger(Plugin plugin) {
+        this.plugin = plugin;
     }
-    public void change(Player player, String value, String signature) {
 
+    public void change(@NotNull Player player, Skin skin) {
         GameProfile profile = ((CraftPlayer)player).getHandle().getProfile();
         PropertyMap pm = profile.getProperties();
-        pm.remove("textures", pm.get("textures").iterator().next());
-        pm.put("textures", new Property(value, signature));
+        //multimap meaning one key can have multiple values. We remove all textures to replace them with our new skin texture
+        pm.removeAll("textures");
+        pm.put("textures", skin);
     }
 
-
     public void update(Player player) {
+        if (!Bukkit.isPrimaryThread()) {
+            Bukkit.getScheduler().runTask(plugin, () -> update2(player));
+        } else update2(player);
+    }
+
+    private void update2(Player player) {
         for (Player onlinePlayer : Bukkit.getOnlinePlayers()) {
             onlinePlayer.hidePlayer(player);
             onlinePlayer.showPlayer(player);

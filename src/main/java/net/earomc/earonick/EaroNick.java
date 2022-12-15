@@ -3,14 +3,9 @@ package net.earomc.earonick;
 import net.earomc.earonick.command.NickCommand;
 import net.earomc.earonick.command.UnnickCommand;
 import net.earomc.earonick.config.ConfigWrapper;
-import net.earomc.earonick.nick.ChatListener;
-import net.earomc.earonick.nick.ConnectionListener;
-import net.earomc.earonick.nick.NickManager;
 import org.bukkit.Bukkit;
 import org.bukkit.plugin.PluginManager;
 import org.bukkit.plugin.java.JavaPlugin;
-
-import java.sql.SQLOutput;
 
 
 public final class EaroNick extends JavaPlugin {
@@ -25,7 +20,7 @@ public final class EaroNick extends JavaPlugin {
         saveDefaultConfig();
         saveResource("messages.yml", false);
 
-        skinChanger = new SkinChanger();
+        skinChanger = new SkinChanger(this);
         messageConfig = new ConfigWrapper("messages.yml", getDataFolder(), this);
 
         nickManager = new NickManager(this);

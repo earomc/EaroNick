@@ -1,16 +1,6 @@
-nick-command:
-  permission: 'global.command.nick'
-  usage:
-    - '&cUsage:'
-    - '&c- /nick [nickname]'
-unnick-command:
-  permission: 'global.command.nick'
-  usage:
-    - '&cUsage:'
-    - '&c- /unnick'
-nicked-name-prefix-tab: '&7'
-nicked-name-prefix-tag: '&7'
-nick-chat-format: '&8[&7Player&8] &7%nickname% &8» &f%message%'
+nicked-name-prefix-tab: '§7'
+nicked-name-prefix-tag: '§7'
+nick-chat-format: '§8[§7Player§8] §7%name% §8» §f%message%'
 
 #default: earomc - skin
 default-skin:

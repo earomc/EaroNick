@@ -1,13 +1,11 @@
-package net.earomc.earonick.nick;
+package net.earomc.earonick;
 
-import net.earomc.earonick.EaroNick;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.AsyncPlayerChatEvent;
-import org.bukkit.event.player.PlayerChatEvent;
 
 /**
  * @author tiiita_
@@ -16,6 +14,8 @@ import org.bukkit.event.player.PlayerChatEvent;
  *
  * Changes the name of nicked players in chat.
  */
+
+// TODO: Somehow move to EaroCore or a separate EaroChat plugin to have one place where all the chatting is handled.
 public class ChatListener implements Listener {
     private final EaroNick plugin;
 
@@ -34,8 +34,7 @@ public class ChatListener implements Listener {
         }
 
         event.setFormat(config.getString("nick-chat-format")
-                .replaceAll("&", "§")
-                .replaceAll("%nickname%", nickManager.getNickName(player))
+                .replaceAll("%name%", nickManager.getNickName(player))
                 .replaceAll("%message%", event.getMessage()));
     }
 }
