@@ -32,7 +32,7 @@ public class UnnickCommand implements CommandExecutor {
         FileConfiguration config = plugin.getConfig();
         ConfigWrapper messageConfig = plugin.getMessageConfig();
 
-        if (!player.hasPermission(config.getString("unnick-command.permission"))) {
+        if (!player.hasPermission(command.getPermission())) {
             player.sendMessage(messageConfig.color(messageConfig.getString("prefix") + messageConfig.getString("no-permission")));
             return false;
         }

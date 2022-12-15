@@ -56,18 +56,18 @@ public class NickCommand implements CommandExecutor {
         }
 
         String nickedWithDefaultSkinWarning = messageConfig.getString("nicked-with-default-skin-warning")
-                .replaceAll("%newLine%", "\n");
-        String nickSuccessfulMessage = prefix + messageConfig.getString("have-been-nicked").replaceAll("%newLine%", "\n");
+                .replaceAll("%newLine%", "\n" + prefix);
+        String nickSuccessfulMessage = messageConfig.getString("have-been-nicked").replaceAll("%newLine%", "\n" + prefix);
 
-        String errorMessage = prefix + messageConfig.getString("error");
+        String errorMessage = messageConfig.getString("error");
         nickManager.nickPlayerAsync(player, newNick).whenComplete((fetchedSkin, throwable) -> {
             if (throwable != null) {
                 throwable.printStackTrace();
-                player.sendMessage(errorMessage.replaceAll("%error%", throwable.getCause().getClass().getName() + throwable.getMessage()));
+                player.sendMessage(prefix + errorMessage.replaceAll("%error%", throwable.getCause().getClass().getName() + throwable.getMessage()));
             } else {
-                player.sendMessage(nickSuccessfulMessage.replaceAll("%newNick%", newNick));
+                player.sendMessage(prefix + nickSuccessfulMessage.replaceAll("%newNick%", newNick));
                 if (!fetchedSkin) {
-                    player.sendMessage(nickedWithDefaultSkinWarning.replaceAll("%newNick%", newNick));
+                    player.sendMessage(prefix + nickedWithDefaultSkinWarning.replaceAll("%newNick%", newNick));
                 }
             }
         });
