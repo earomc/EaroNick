@@ -26,13 +26,13 @@ public class ConnectionListener implements Listener {
         Player player = event.getPlayer();
         NickManager nickManager = plugin.getNickManager();
 
-        for (Player currentPlayer : nickManager.getNickedPlayers()) {
-            if (currentPlayer == player) continue;
-            if (currentPlayer == null) continue;
+        for (Player nickedPlayer : nickManager.getNickedPlayers()) {
+            if (nickedPlayer == player) continue;
+            if (nickedPlayer == null) continue;
 
 
-            if (nickManager.getNickName(currentPlayer).equalsIgnoreCase(player.getName())) {
-                currentPlayer.kickPlayer(plugin.getConfig().getString("player-with-nick-joined").replaceAll("%newLine%", "\n"));
+            if (nickManager.getNickName(nickedPlayer).equalsIgnoreCase(player.getName())) {
+                nickedPlayer.kickPlayer(plugin.getConfig().getString("player-with-nick-joined").replaceAll("%newLine%", "\n"));
             }
         }
     }
