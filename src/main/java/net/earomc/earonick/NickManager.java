@@ -41,6 +41,20 @@ public class NickManager {
     private final ConcurrentHashMap<UUID, Skin> playerToRealSkinMap = new ConcurrentHashMap<>();
 
 
+    public static class NickResult {
+        public final int test = 0;
+        public final Player nickedPlayer;
+        public final String newName;
+        public final boolean fetchSuccessful;
+
+        public NickResult(Player nickedPlayer, String newName, boolean fetchedSuccessful) {
+            //Nick result
+            this.newName = newName;
+            this.nickedPlayer = nickedPlayer;
+            this.fetchSuccessful = fetchedSuccessful;
+        }
+    }
+
     /**
      * @param player  player that you would like to nick.
      * @param newName the players new nickname.
@@ -48,7 +62,7 @@ public class NickManager {
      * Which is logically equivalent to whether or not the newName is from a real player.
      * True if skin could be fetched (newName player is real) or not (newName player is not real).
      */
-    public boolean nickPlayer(Player player, String newName) {
+    public NickResult nickPlayer(Player player, String newName) {
         SkinChanger skinChanger = plugin.getSkinChanger();
         playerToRealNameMap.put(player.getUniqueId(), player.getName());
         playerToRealSkinMap.put(player.getUniqueId(), Skin.fromPlayer(player));
@@ -70,7 +84,7 @@ public class NickManager {
         skinChanger.update(player);
 
         nickedPlayers.add(player);
-        return fetchSuccessful;
+        return new NickResult(player,newName, fetchSuccessful);
     }
 
 

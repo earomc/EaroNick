@@ -8,6 +8,8 @@ import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
+import java.util.function.BiConsumer;
+
 /**
  * @author tiiita_
  * Created on Dezember 11, 2022 | 03:21:40
