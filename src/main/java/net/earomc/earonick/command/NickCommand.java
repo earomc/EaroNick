@@ -3,11 +3,14 @@ package net.earomc.earonick.command;
 import net.earomc.earonick.EaroNick;
 import net.earomc.earonick.config.ConfigWrapper;
 import net.earomc.earonick.NickManager;
+import net.earomc.earonick.mojangapi.MojangAPIException;
+import org.bukkit.Bukkit;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
+import java.io.IOException;
 import java.util.function.BiConsumer;
 
 /**
@@ -42,7 +45,6 @@ public class NickCommand implements CommandExecutor {
 
         NickManager nickManager = plugin.getNickManager();
 
-
         String nickedWithDefaultSkinWarning = messageConfig.getString("nicked-with-default-skin-warning")
                 .replaceAll("%newLine%", "\n" + prefix);
         String nickSuccessfulMessage = messageConfig.getString("have-been-nicked").replaceAll("%newLine%", "\n" + prefix);
@@ -51,6 +53,7 @@ public class NickCommand implements CommandExecutor {
 
         BiConsumer<NickManager.NickResult, Throwable> action = (nickResult, throwable) -> {
             if (throwable != null) {
+                System.err.println(throwable.getMessage());
                 throwable.printStackTrace();
                 player.sendMessage(prefix + errorMessage.replaceAll("%error%", throwable.getCause().getClass().getName() + throwable.getMessage()));
             } else {
@@ -67,7 +70,8 @@ public class NickCommand implements CommandExecutor {
                     player.sendMessage(prefix + messageConfig.getString("already-nicked"));
                     return true;
                 }
-                nickManager.randomNickPlayerAsync(player).whenComplete(action);
+                
+
                 break;
             }
             case 1:
@@ -76,6 +80,14 @@ public class NickCommand implements CommandExecutor {
                     return true;
                 }
                 String newNick = args[0];
+
+                for (Player onlinePlayer : Bukkit.getOnlinePlayers()) {
+                    if (onlinePlayer.getName().equalsIgnoreCase(newNick)) {
+                        player.sendMessage(prefix + plugin.getMessageConfig().getString("nick-already-online"));
+                        return true;
+                    }
+                }
+
                 if (newNick.length() >= 16) {
                     player.sendMessage(prefix + messageConfig.getString("nickname-too-long"));
                     return true;

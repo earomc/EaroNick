@@ -2,6 +2,7 @@ package net.earomc.earonick.mojangapi;
 
 import net.earomc.earonick.mojangapi.requests.ProfileRequest;
 import net.earomc.earonick.mojangapi.requests.UUIDRequest;
+import org.jetbrains.annotations.NotNull;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
@@ -58,7 +59,9 @@ public class MojangAPI {
         return uuidFromString((String) jsonObject.get("id"));
     }
 
-    public static String requestName(UUID uuid) throws MojangAPIException {
+
+
+    public static String requestName(@NotNull UUID uuid) throws MojangAPIException {
         return requestProfile(uuid).name;
     }
 

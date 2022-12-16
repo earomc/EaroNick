@@ -38,7 +38,6 @@ public class UnnickCommand implements CommandExecutor {
         }
 
         if (args.length != 0) {
-            sendCommandUsage(player);
             return false;
         }
 
@@ -47,19 +46,12 @@ public class UnnickCommand implements CommandExecutor {
         String prefix = messageConfig.color(messageConfig.getString("prefix"));
         if (!nickManager.isNicked(player)) {
             player.sendMessage(prefix + messageConfig.color(messageConfig.getString("not-nicked")));
-            return false;
+            return true;
         }
 
         nickManager.unnickPlayer(player);
         player.sendMessage(prefix + messageConfig.color(messageConfig.getString("have-been-unnicked")
                 .replaceAll("%newLine%", "\n" + prefix)));
         return true;
-    }
-
-    private void sendCommandUsage(Player player) {
-
-        for (String currentMessage : plugin.getConfig().getStringList("unnick-command.usage")) {
-            player.sendMessage(currentMessage.replaceAll("&", "§"));
-        }
     }
 }

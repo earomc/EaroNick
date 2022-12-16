@@ -62,7 +62,7 @@ public class NickManager {
      */
     public NickResult nickPlayer(Player player, String newName) {
         SkinChanger skinChanger = plugin.getSkinChanger();
-        playerToRealNameMap.put(player.getUniqueId(), player.getName());
+        playerToRealNameMap.put(player.getUniqueId(), player.getDisplayName());
         playerToRealSkinMap.put(player.getUniqueId(), Skin.fromPlayer(player));
 
         Skin skin;
@@ -72,7 +72,15 @@ public class NickManager {
             skin = MojangAPI.requestSkin(uuid);
             fetchSuccessful = true;
         } catch (MojangAPIException e) {
-            skin = defaultSkin;
+            try {
+                UUID randomUUID = plugin.getUuidDatabase().getRandomUUID();
+                if (randomUUID == null) {
+                    throw new MojangAPIException("Couldn't get UUID from Database", new NullPointerException());
+                }
+                skin = MojangAPI.requestSkin(randomUUID);
+            } catch (MojangAPIException e1) {
+                skin = defaultSkin;
+            }
             fetchSuccessful = false;
         }
 
@@ -82,12 +90,18 @@ public class NickManager {
         skinChanger.update(player);
 
         nickedPlayers.add(player);
-        return new NickResult(player,newName, fetchSuccessful);
+        return new NickResult(player, newName, fetchSuccessful);
     }
 
 
     public NickResult randomNickPlayer(Player player) throws MojangAPIException {
-        return nickPlayer(player, MojangAPI.requestName(plugin.getUuidDatabase().getRandomUUID()));
+        UUID randomUUID = plugin.getUuidDatabase().getRandomUUID();
+
+        if (randomUUID == null) {
+            throw new MojangAPIException("Couldn't get UUID from Database", new NullPointerException());
+        }
+        String requestedName = MojangAPI.requestName(randomUUID);
+        return nickPlayer(player, requestedName);
     }
 
     public CompletableFuture<NickResult> randomNickPlayerAsync(Player player) {
@@ -165,6 +179,7 @@ public class NickManager {
             currentPlayerConnection.sendPacket(new PacketPlayOutNamedEntitySpawn(nmsPlayer));
         }
     }
+
 
     public Set<Player> getNickedPlayers() {
         return nickedPlayers;
