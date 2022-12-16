@@ -6,7 +6,7 @@ nickname-too-long: '§cThe nickname is too long.'
 already-nicked: '§cYou are already nicked. Please use /unnick to disable your nickname.'
 not-nicked: '§cYou are not nicked.'
 
-player-with-nick-joined: '§7§m-------------------%newLine%§cYou were kicked because a player with your nickname has joined.%newLine%§7§m-------------------'
+player-with-nick-joined: '§7§m-------------------%newLine%%newLine%§cYou were kicked because a player with your nickname has joined.%newLine%%newLine%§7§m-------------------'
 
 have-been-nicked: '§7You are now nicked as §6%newNick%§7.%newLine%§7You cannot see your nickname but everyone else can.'
 nicked-with-default-skin-warning: '§6%newNick%" §cis not a real player name.%newLine% You were given a default skin.'

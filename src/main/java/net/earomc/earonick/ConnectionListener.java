@@ -1,5 +1,6 @@
 package net.earomc.earonick;
 
+import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
@@ -28,7 +29,11 @@ public class ConnectionListener implements Listener {
 
         for (Player nickedPlayer : nickManager.getNickedPlayers()) {
             if (nickManager.getNickName(nickedPlayer).equalsIgnoreCase(player.getName())) {
-                nickedPlayer.kickPlayer("test");
+
+                Bukkit.getScheduler().runTaskLater(plugin, () -> {
+                    String kickMessage = plugin.getMessageConfig().getString("player-with-nick-joined").replaceAll("%newLine%", "\n");
+                    nickedPlayer.kickPlayer(kickMessage);
+                }, 20);
             }
         }
     }
