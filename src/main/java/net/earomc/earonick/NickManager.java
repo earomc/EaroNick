@@ -47,7 +47,6 @@ public class NickManager {
         public final boolean fetchSuccessful;
 
         public NickResult(Player nickedPlayer, String newName, boolean fetchedSuccessful) {
-            //Nick result
             this.newName = newName;
             this.nickedPlayer = nickedPlayer;
             this.fetchSuccessful = fetchedSuccessful;
