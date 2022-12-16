@@ -27,12 +27,8 @@ public class ConnectionListener implements Listener {
         NickManager nickManager = plugin.getNickManager();
 
         for (Player nickedPlayer : nickManager.getNickedPlayers()) {
-            if (nickedPlayer == player) continue;
-            if (nickedPlayer == null) continue;
-
-
             if (nickManager.getNickName(nickedPlayer).equalsIgnoreCase(player.getName())) {
-                nickedPlayer.kickPlayer(plugin.getConfig().getString("player-with-nick-joined").replaceAll("%newLine%", "\n"));
+                nickedPlayer.kickPlayer("test");
             }
         }
     }
@@ -42,7 +38,8 @@ public class ConnectionListener implements Listener {
 
         NickManager nickManager = plugin.getNickManager();
 
-        if (nickManager.isNicked(player))
+        if (nickManager.isNicked(player)) {
             nickManager.unnickPlayer(player);
+        }
     }
 }

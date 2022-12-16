@@ -42,7 +42,6 @@ public class NickManager {
 
 
     public static class NickResult {
-        public final int test = 0;
         public final Player nickedPlayer;
         public final String newName;
         public final boolean fetchSuccessful;

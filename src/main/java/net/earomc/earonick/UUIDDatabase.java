@@ -15,7 +15,7 @@ import java.util.UUID;
  */
 public class UUIDDatabase {
 
-    private FileWrapper fileWrapper;
+    private final FileWrapper fileWrapper;
 
     public UUIDDatabase(EaroNick plugin) {
         this.fileWrapper = new FileWrapper(plugin, plugin.getDataFolder(), "player_uuids.txt");
