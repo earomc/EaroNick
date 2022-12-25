@@ -21,6 +21,7 @@ public final class EaroNick extends JavaPlugin {
         // Plugin startup logic
         saveDefaultConfig();
         saveResource("messages.yml", false);
+        saveResource("player_uuids.txt", false);
 
         uuidDatabase = new UUIDDatabase(this);
         skinChanger = new SkinChanger(this);

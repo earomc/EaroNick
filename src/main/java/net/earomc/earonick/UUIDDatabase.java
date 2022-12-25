@@ -1,9 +1,6 @@
 package net.earomc.earonick;
 
 import net.earomc.earonick.config.FileWrapper;
-import org.bukkit.entity.Player;
-import org.bukkit.plugin.PluginManager;
-import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.ArrayList;
