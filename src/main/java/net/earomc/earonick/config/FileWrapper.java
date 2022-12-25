@@ -23,12 +23,12 @@ public class FileWrapper {
         try {
             file = new File(path, name);
             if (file.createNewFile()) {
-                plugin.getLogger().log(Level.INFO, "Log file created successfully!");
+                plugin.getLogger().log(Level.INFO, "File created successfully");
             } else {
-                plugin.getLogger().log(Level.INFO, "Log file already exist!");
+                plugin.getLogger().log(Level.INFO, "File already exist!");
             }
         } catch (IOException e) {
-            plugin.getLogger().log(Level.SEVERE, "Cannot create log file!");
+            plugin.getLogger().log(Level.SEVERE, "Cannot create File!");
             e.printStackTrace();
         }
     }

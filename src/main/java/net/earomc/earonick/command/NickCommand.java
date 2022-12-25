@@ -70,7 +70,7 @@ public class NickCommand implements CommandExecutor {
                     player.sendMessage(prefix + messageConfig.getString("already-nicked"));
                     return true;
                 }
-                
+
 
                 break;
             }
