@@ -1,11 +1,10 @@
 package net.earomc.earonick;
 
-import org.bukkit.configuration.file.FileConfiguration;
-import org.bukkit.entity.Player;
+import net.earomc.earocore.chat.EaroChatEvent;
+import net.earomc.earocore.rank.Rank;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
-import org.bukkit.event.player.AsyncPlayerChatEvent;
 
 /**
  * @author tiiita_
@@ -15,26 +14,19 @@ import org.bukkit.event.player.AsyncPlayerChatEvent;
  * Changes the name of nicked players in chat.
  */
 
-// TODO: Somehow move to EaroCore or a separate EaroChat plugin to have one place where all the chatting is handled.
 public class ChatListener implements Listener {
-    private final EaroNick plugin;
+    private final NickManager nickManager;
 
-    public ChatListener(EaroNick plugin) {
-        this.plugin = plugin;
+    public ChatListener(NickManager nickManager) {
+        this.nickManager = nickManager;
     }
 
     @EventHandler(priority = EventPriority.HIGH)
-    public void onChat(AsyncPlayerChatEvent event) {
-
-        Player player = event.getPlayer();
-        NickManager nickManager = plugin.getNickManager();
-        FileConfiguration config = plugin.getConfig();
-        if (!nickManager.isNicked(player)) {
+    public void onChat(EaroChatEvent event) {
+        if (!nickManager.isNicked(event.getPlayer())) {
             return;
         }
-
-        event.setFormat(config.getString("nick-chat-format")
-                .replaceAll("%name%", nickManager.getNickName(player))
-                .replaceAll("%message%", event.getMessage()));
+        event.setName(event.getName());
+        event.setRank(Rank.PLAYER);
     }
 }

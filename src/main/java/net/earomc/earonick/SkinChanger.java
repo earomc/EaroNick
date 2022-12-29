@@ -23,7 +23,7 @@ public class SkinChanger {
     }
 
     public void change(@NotNull Player player, Skin skin) {
-        GameProfile profile = ((CraftPlayer)player).getHandle().getProfile();
+        GameProfile profile = NMSUtil.getNMSPlayer(player).getProfile();
         PropertyMap pm = profile.getProperties();
         //multimap meaning one key can have multiple values. We remove all textures to replace them with our new skin texture
         pm.removeAll("textures");

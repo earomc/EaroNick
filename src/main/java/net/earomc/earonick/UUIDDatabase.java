@@ -11,25 +11,28 @@ import java.util.UUID;
  * @author tiiita_
  * Created on Dezember 15, 2022 | 22:25:08
  * (●'◡'●)
+ * <p>
+ * Represents a file of player UUID strings seperatated with a \n newline.
+ * </p>
+ * <p>
+ * This allows to choose random nicknames and skins for when players
+ * don't specify a nickname using the /nick command.
+ * </p>
  */
 public class UUIDDatabase {
 
-    private final FileWrapper fileWrapper;
+    private final FileWrapper uuidFile;
 
     public UUIDDatabase(EaroNick plugin) {
-        this.fileWrapper = new FileWrapper(plugin, plugin.getDataFolder(), "player_uuids.txt");
+        this.uuidFile = new FileWrapper(plugin, plugin.getDataFolder(), "player_uuids.txt");
     }
 
     @Nullable
     public UUID getRandomUUID() {
-
-        ArrayList<String> lines = fileWrapper.getLines();
-
-        if (lines.isEmpty()) {
+        ArrayList<String> lines = uuidFile.getLines();
+        if (lines == null || lines.isEmpty()) {
             return null;
         }
-        Random random = new Random();
-        int randomInt = random.nextInt(lines.size());
-        return UUID.fromString(lines.get(randomInt));
+        return UUID.fromString(lines.get(new Random().nextInt(lines.size())));
     }
 }

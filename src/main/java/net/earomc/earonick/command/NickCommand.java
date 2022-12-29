@@ -14,7 +14,7 @@ import java.io.IOException;
 import java.util.function.BiConsumer;
 
 /**
- * @author tiiita_
+ * @author tiiita_ & earomc
  * Created on Dezember 11, 2022 | 03:21:40
  * (●'◡'●)
  */
@@ -51,7 +51,7 @@ public class NickCommand implements CommandExecutor {
 
         String errorMessage = messageConfig.getString("error");
 
-        BiConsumer<NickManager.NickResult, Throwable> action = (nickResult, throwable) -> {
+        BiConsumer<NickManager.NickResult, Throwable> handleNickAttemptAction = (nickResult, throwable) -> {
             if (throwable != null) {
                 System.err.println(throwable.getMessage());
                 throwable.printStackTrace();
@@ -70,8 +70,7 @@ public class NickCommand implements CommandExecutor {
                     player.sendMessage(prefix + messageConfig.getString("already-nicked"));
                     return true;
                 }
-
-
+                nickManager.randomNickPlayerAsync(player).whenComplete(handleNickAttemptAction);
                 break;
             }
             case 1:
@@ -92,7 +91,7 @@ public class NickCommand implements CommandExecutor {
                     player.sendMessage(prefix + messageConfig.getString("nickname-too-long"));
                     return true;
                 }
-                nickManager.nickPlayerAsync(player, newNick).whenComplete(action);
+                nickManager.nickPlayerAsync(player, newNick).whenComplete(handleNickAttemptAction);
                 break;
         }
 

@@ -33,12 +33,7 @@ public final class EaroNick extends JavaPlugin {
         registerListener();
     }
 
-    @Override
-    public void onDisable() {
-        // Plugin shutdown logic
-    }
     private void registerCommands() {
-
         getCommand("nick").setExecutor(new NickCommand(this));
         getCommand("unnick").setExecutor(new UnnickCommand(this));
     }
@@ -46,8 +41,8 @@ public final class EaroNick extends JavaPlugin {
     private void registerListener() {
         PluginManager pluginManager = Bukkit.getPluginManager();
 
-        pluginManager.registerEvents(new ChatListener(this), this);
-        pluginManager.registerEvents(new ConnectionListener(this), this);
+        pluginManager.registerEvents(new ChatListener(nickManager), this);
+        pluginManager.registerEvents(new ConnectionListener(nickManager), this);
     }
 
 
