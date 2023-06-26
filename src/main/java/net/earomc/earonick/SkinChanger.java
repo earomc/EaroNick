@@ -9,11 +9,6 @@ import org.bukkit.entity.Player;
 import org.bukkit.plugin.Plugin;
 import org.jetbrains.annotations.NotNull;
 
-/**
- * @author tiiita_
- * Created on Dezember 12, 2022 | 22:11:25
- * (●'◡'●)
- */
 public class SkinChanger {
 
     private final Plugin plugin;

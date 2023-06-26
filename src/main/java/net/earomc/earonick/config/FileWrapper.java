@@ -7,11 +7,6 @@ import java.io.*;
 import java.util.ArrayList;
 import java.util.logging.Level;
 
-/**
- * @author tiiita_
- * Created on Dezember 07, 2022 | 16:33:48
- * (●'◡'●)
- */
 public class FileWrapper {
 
     private File file;
@@ -40,7 +35,6 @@ public class FileWrapper {
             while ((lastLine = bufferedReader.readLine()) != null) {
                 lines.add(lastLine);
             }
-
             return lines;
         } catch (IOException e) {
             e.printStackTrace();

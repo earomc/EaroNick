@@ -6,14 +6,6 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 
-/**
- * @author tiiita_
- * Created on Dezember 11, 2022 | 13:10:09
- * (●'◡'●)
- *
- * Changes the name of nicked players in chat.
- */
-
 public class ChatListener implements Listener {
     private final NickManager nickManager;
 

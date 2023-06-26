@@ -13,11 +13,6 @@ import org.bukkit.entity.Player;
 import java.io.IOException;
 import java.util.function.BiConsumer;
 
-/**
- * @author tiiita_ & earomc
- * Created on Dezember 11, 2022 | 03:21:40
- * (●'◡'●)
- */
 public class NickCommand implements CommandExecutor {
 
     private final EaroNick plugin;

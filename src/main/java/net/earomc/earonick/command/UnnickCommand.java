@@ -9,11 +9,6 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.entity.Player;
 
-/**
- * @author tiiita_
- * Created on Dezember 11, 2022 | 03:24:25
- * (●'◡'●)
- */
 public class UnnickCommand implements CommandExecutor {
     private final EaroNick plugin;
 

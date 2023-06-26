@@ -17,11 +17,6 @@ import java.util.UUID;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ConcurrentHashMap;
 
-/**
- * @author tiiita_
- * Created on Dezember 11, 2022 | 01:49:47
- * (●'◡'●)
- */
 public class NickManager {
 
     private final EaroNick plugin;
@@ -35,7 +30,6 @@ public class NickManager {
 
     /*
     we use thread-safe implementations of java.util.Set and java.util.Map because we access them from different threads.
-    I just googled "thread-safe HashSet" and "thread-safe HashMap" :P
      */
     private final Set<Player> nickedPlayers = ConcurrentHashMap.newKeySet();
     private final ConcurrentHashMap<UUID, String> playerToRealNameMap = new ConcurrentHashMap<>();

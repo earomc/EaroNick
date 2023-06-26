@@ -59,8 +59,6 @@ public class MojangAPI {
         return uuidFromString((String) jsonObject.get("id"));
     }
 
-
-
     public static String requestName(@NotNull UUID uuid) throws MojangAPIException {
         return requestProfile(uuid).name;
     }

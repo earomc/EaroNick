@@ -10,12 +10,6 @@ import java.io.IOException;
 import java.util.List;
 import java.util.logging.Level;
 
-/**
- * @author NieGestorben, tiiita_
- * Created on Juli 29, 2022 | 18:31:59
- * (●'◡'●)
- */
-
 public class ConfigWrapper {
     private final EaroNick plugin;
 

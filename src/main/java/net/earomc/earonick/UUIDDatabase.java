@@ -8,11 +8,8 @@ import java.util.Random;
 import java.util.UUID;
 
 /**
- * @author tiiita_
- * Created on Dezember 15, 2022 | 22:25:08
- * (●'◡'●)
  * <p>
- * Represents a file of player UUID strings seperatated with a \n newline.
+ * Represents a file of player UUID strings separated with a \n newline.
  * </p>
  * <p>
  * This allows to choose random nicknames and skins for when players

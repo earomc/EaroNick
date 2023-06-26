@@ -20,7 +20,6 @@ public class ProfileRequest {
         // the player's UUID
         public final UUID id;
         // the player's name
-
         public final String name;
         //player's skin texture signature
         public final String signature;

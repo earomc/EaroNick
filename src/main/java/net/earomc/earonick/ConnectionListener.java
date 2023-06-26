@@ -6,13 +6,7 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
 
-/**
- * @author tiiita_
- * Created on Dezember 11, 2022 | 13:14:29
- * (●'◡'●)
- */
 public class ConnectionListener implements Listener {
-
 
     private final NickManager nickManager;
 
