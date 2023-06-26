@@ -3,7 +3,6 @@ package net.earomc.earonick;
 import net.earomc.earonick.command.NickCommand;
 import net.earomc.earonick.command.UnnickCommand;
 import net.earomc.earonick.config.ConfigWrapper;
-import net.earomc.earonick.config.FileWrapper;
 import org.bukkit.Bukkit;
 import org.bukkit.plugin.PluginManager;
 import org.bukkit.plugin.java.JavaPlugin;
@@ -40,8 +39,6 @@ public final class EaroNick extends JavaPlugin {
 
     private void registerListener() {
         PluginManager pluginManager = Bukkit.getPluginManager();
-
-        pluginManager.registerEvents(new ChatListener(nickManager), this);
         pluginManager.registerEvents(new ConnectionListener(nickManager), this);
     }
 

@@ -19,7 +19,7 @@ public class ConnectionListener implements Listener {
         Player player = event.getPlayer();
         for (Player nickedPlayer : nickManager.getNickedPlayers()) {
             if (nickManager.getNickName(nickedPlayer).equalsIgnoreCase(player.getName())) {
-                nickedPlayer.kickPlayer("test");
+                nickedPlayer.kickPlayer("Kicked because a player with your nick name joined.");
             }
         }
     }
